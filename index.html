@@ -36,7 +36,7 @@
 </head>
 <body>
 <div class="app">
-<header><div class="top"><span class="dice">🎲</span><button class="gear" onclick="show('settings')">⚙️</button></div><h1 id="title">Schön, dass du da bist!</h1><div class="sub" id="subtitle">Deine persönliche Brettspiel-Sammlung · Version 9</div></header>
+<header><div class="top"><span class="dice">🎲</span><button class="gear" onclick="show('settings')">⚙️</button></div><h1 id="title">Schön, dass du da bist!</h1><div class="sub" id="subtitle">Deine persönliche Brettspiel-Sammlung · Version 12</div></header>
 <main class="content">
 <section id="home">
   <div class="grid">
@@ -83,6 +83,21 @@ games.forEach(g=>{if(!Array.isArray(g.categories))g.categories=[g.cat];});
 function catsOf(g){return Array.isArray(g.categories)&&g.categories.length?g.categories:[g.cat];}
 function catText(g){return catsOf(g).join(" · ");}
 const COVER_MAP={
+"DOS":"assets/dos.jpg",
+"Dos":"assets/dos.jpg",
+"Illusion":"assets/illusion.jpg",
+"Shadow Cards":"assets/shadow_cards.jpg",
+"Druids":"assets/druids.jpg",
+"Kakerlakenpoker":"assets/kakerlakenpoker.jpg",
+"Schummelhummel":"assets/schummelhummel.jpg",
+"Kakerlakensalat":"assets/kakerlakensalat.jpg",
+"Moggel Motte":"assets/moggel_motte.jpg",
+"Mogel Motte":"assets/moggel_motte.jpg",
+"Machi Koro – Großstadt Erweiterung":"assets/machi_koro_grossstadt.webp",
+"Gemeinsame Sache (Partyfieber 4)":"assets/gemeinsame_sache.jpg",
+"If You Were – A Party Game":"assets/if_you_were.jpg",
+"Play – The Music Party Game":"assets/play.jpg",
+"Im Namen des Volkes – Fall 1: Die tödlichen Goldfische":"assets/im_namen_des_volkes.jpg",
 "Skullqueen":"assets/skullqueen.jpg",
 "Rummy":"assets/rummy.jpg",
 "Risiko":"assets/risiko.jpg",
@@ -92,7 +107,14 @@ const COVER_MAP={
 "Fiasco":"assets/fiasco.jpg",
 "Rummikub":"assets/rummikub_wort.jpg",
 "Würfel Ligretto":"assets/wuerfel_ligretto.jpg",
-"Kampf gegen die Korinthenkacker":"assets/korinthenkacker.jpg"
+"Kampf gegen die Korinthenkacker":"assets/korinthenkacker.jpg",
+"Moggel Motte":"https://m.media-amazon.com/images/I/51fFa2nkKGL.jpg",
+"Kakerlakensalat":"https://shop.fuhr.info/2618131-cart_default/drei-magier-spiele-kakerlakensalat.jpg",
+"Schummelhummel":"https://allgo-games.com/717-large_default/schummel-hummel.jpg",
+"Wizard":"https://www.rossmann.dk/media-neu/122/MAM_12219482/MAM_12219482_SHOP_IMAGE_2.0.png?auto=webp&canvas=600%2C600&fit=bounds&format=webply&height=600&quality=80&width=600",
+"Machi Koro":"https://www.kosmos.de/cdn/shop/files/4002051692322.png?v=1786074424&width=949",
+"Flamecraft":"https://store.asmodee.com/cdn/shop/files/LKYFMCR01EN_535x.jpg?v=1690991871",
+"That's not a hat":"https://ravensburger.cloud/images/product-cover/310x250/Thats-not-a-hat-Kartenspiel-ab-8-Jahren-20954.webp"
 };
 games.forEach(g=>{if(!g.cover&&COVER_MAP[g.name])g.cover=COVER_MAP[g.name];});
 function coverHTML(g,large=false){return g.cover?`<div class="${large?'detailcover':'cover'} coverimage"><img src="${g.cover}" alt="${esc(g.name)}">${!large?`<span class="fav">${g.fav?"♥":""}</span>`:""}</div>`:`<div class="${large?'detailcover':'cover'}">${g.name}${!large?`<span class="fav">${g.fav?"♥":""}</span>`:""}</div>`;}
