@@ -33,101 +33,96 @@
   
 .gameclick{cursor:pointer}.detailcover{height:220px;border-radius:20px;display:flex;align-items:center;justify-content:center;color:white;font-size:34px;font-weight:800;text-align:center;padding:20px;background:linear-gradient(135deg,#6b8f71,#274b38);margin-bottom:15px}.detailgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.detailitem{background:white;border-radius:14px;padding:12px}.detailitem b{display:block;font-size:12px;color:var(--muted);margin-bottom:3px}.starbtn{background:#fff1b8;border-radius:12px;padding:10px}.danger{background:#f4d9d5!important;color:#8d3026!important}
 .game button{position:relative;z-index:2}.game .btn{display:block}.\n.chips{scrollbar-width:none}.chips::-webkit-scrollbar{display:none}.detailcover{box-shadow:inset 0 0 0 1px #ffffff18}.gamebody .meta{line-height:1.45}.coverimage{padding:0!important;overflow:hidden}.coverimage img{width:100%;height:100%;object-fit:cover;display:block}.coverwrap{height:150px}.coverwrap .cover{height:150px}.detailcover.coverimage{height:220px}.detailcover.coverimage img{object-fit:contain;background:#eee}.coverimage .fav{position:absolute;right:8px;top:8px}.cover{position:relative}
-/* Design C – Spielabend-Startseite */
-.gamefinder-hero{background:linear-gradient(135deg,#dff3ea,#b9e2d3);border-radius:24px;padding:24px 20px;margin-bottom:14px;overflow:hidden;position:relative}
-.gamefinder-hero h2{font-size:30px;line-height:1.08;margin:0 0 9px;color:#123c35}
-.gamefinder-hero p{margin:0;color:#355c55;font-size:15px;max-width:430px}
-.finder-card{background:#fff;border:1px solid #e3e0d8;border-radius:20px;padding:15px;margin-bottom:10px}
-.finder-title{display:flex;align-items:center;gap:9px;font-size:17px;font-weight:800;margin-bottom:11px}
-.finder-options{display:flex;gap:8px;overflow:auto;padding-bottom:2px;scrollbar-width:none}
-.finder-options::-webkit-scrollbar{display:none}
-.finder-option{flex:0 0 auto;border:1px solid #e0ded7;background:#f5f4f1;border-radius:13px;padding:11px 15px;font-size:14px;color:#18251f}
-.finder-option.active{background:var(--green);border-color:var(--green);color:#fff;font-weight:800}
-.finder-cats{display:flex;flex-wrap:wrap;gap:8px}
-.finder-cat{border:1px solid #e0ded7;background:#f5f4f1;border-radius:13px;padding:10px 13px;font-size:13px}
-.finder-cat.active{background:var(--green);border-color:var(--green);color:#fff;font-weight:800}
-.finder-actions{display:grid;grid-template-columns:1fr auto;gap:9px;margin:14px 0}
-.finder-main{font-size:17px;font-weight:800;padding:15px;border-radius:16px}
-.finder-random{padding:15px 17px;border-radius:16px;background:#fff;color:var(--green);border:1px solid #b8d1c7;font-weight:800}
-.finder-heading{display:flex;justify-content:space-between;align-items:center;margin:18px 2px 10px}
-.finder-heading h2{font-size:20px;margin:0}
-.finder-heading button{background:transparent;color:var(--green);font-weight:800;padding:5px}
-.finder-results{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.finder-game{background:#fff;border:1px solid #e3ddd1;border-radius:17px;overflow:hidden;cursor:pointer}
-.finder-cover{height:145px;background:linear-gradient(135deg,#6b8f71,#274b38);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;text-align:center;padding:10px}
-.finder-cover img{width:100%;height:100%;object-fit:cover;display:block}
-.finder-gamebody{padding:10px}
-.finder-gamebody strong{display:block;line-height:1.2}
-.finder-meta{color:var(--muted);font-size:11px;margin-top:5px;line-height:1.35}
-.finder-empty{background:#fff;border:1px dashed #c9c5bb;border-radius:18px;padding:20px;text-align:center;color:var(--muted)}
-.finder-picked{background:#fff;border:2px solid var(--green);border-radius:20px;padding:12px;margin-bottom:14px}
-.finder-picked-inner{display:grid;grid-template-columns:92px 1fr;gap:13px;align-items:center}
-.finder-picked-cover{height:118px;border-radius:13px;overflow:hidden;background:linear-gradient(135deg,#4f78a4,#253d5b);display:flex;align-items:center;justify-content:center;color:#fff;text-align:center;font-weight:800;padding:8px}
-.finder-picked-cover img{width:100%;height:100%;object-fit:cover}
-.finder-picked h3{margin:0 0 6px;font-size:20px}
-.finder-picked .btn{margin-top:8px}
-@media(min-width:700px){.finder-results{grid-template-columns:repeat(4,1fr)}.gamefinder-hero{padding:30px}.finder-card{padding:18px}}
+/* Version 22 – warmes, modernes Spielabend-Design */
+.home-v22{padding-top:2px}
+.v22-hero{background:linear-gradient(135deg,#dff0e8 0%,#c4e2d5 100%);border-radius:26px;padding:25px 22px;margin-bottom:14px;position:relative;overflow:hidden}
+.v22-hero:after{content:"🎲  ♟  🎲";position:absolute;right:14px;bottom:8px;font-size:31px;opacity:.24;transform:rotate(-8deg)}
+.v22-hero h2{margin:0 45px 7px 0;font-size:30px;line-height:1.05;letter-spacing:-.7px;color:#123c34}
+.v22-hero p{margin:0;color:#3e6258;font-size:15px;max-width:420px}
+.v22-filter{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:15px;margin-bottom:10px;box-shadow:0 4px 15px #00000007}
+.v22-filter-title{font-weight:800;font-size:17px;margin-bottom:11px;display:flex;align-items:center;gap:8px}
+.v22-options{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}.v22-options::-webkit-scrollbar{display:none}
+.v22-opt{background:#f1f0ec;border:1px solid #e1ded6;border-radius:13px;padding:10px 14px;white-space:nowrap;color:var(--text)}
+.v22-opt.active{background:var(--green);border-color:var(--green);color:#fff;font-weight:800}
+.v22-cats{display:flex;flex-wrap:wrap;gap:8px}
+.v22-cat{background:#f1f0ec;border:1px solid #e1ded6;border-radius:13px;padding:9px 12px}
+.v22-cat.active{background:var(--green);border-color:var(--green);color:#fff;font-weight:800}
+.v22-actions{display:grid;grid-template-columns:1fr auto;gap:9px;margin:14px 0}
+.v22-mainbtn{background:var(--green);color:white;border-radius:17px;padding:15px;font-size:17px;font-weight:800;box-shadow:0 5px 13px #173b2a25}
+.v22-random{background:transparent;color:var(--green);border:1px solid #a9c9bc;border-radius:17px;padding:15px 17px;font-weight:800}
+.v22-picked{background:#fffaf0;border:1px solid #e6d9bd;border-radius:23px;padding:14px;margin-bottom:15px;box-shadow:0 5px 16px #00000007}
+.v22-picked-inner{display:grid;grid-template-columns:105px 1fr;gap:15px;align-items:center}
+.v22-picked-cover{height:135px;border-radius:15px;overflow:hidden;background:linear-gradient(135deg,#557b67,#214638);display:flex;align-items:center;justify-content:center;color:#fff;text-align:center;font-weight:800;padding:8px}
+.v22-picked-cover img{width:100%;height:100%;object-fit:cover}
+.v22-picked h3{margin:2px 0 5px;font-size:23px;line-height:1.1}
+.v22-picked .rating{color:#d49320;font-weight:800;margin:5px 0}
+.v22-heading{display:flex;justify-content:space-between;align-items:end;margin:18px 2px 10px}
+.v22-heading h2{margin:0;font-size:21px;letter-spacing:-.3px}.v22-heading span{color:var(--muted);font-size:13px}
+.v22-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.v22-game{background:var(--card);border:1px solid var(--line);border-radius:17px;overflow:hidden;cursor:pointer;box-shadow:0 4px 13px #00000006}
+.v22-cover{height:150px;background:linear-gradient(135deg,#63896f,#284b3b);display:flex;align-items:center;justify-content:center;color:white;text-align:center;font-weight:800;padding:10px}
+.v22-cover img{width:100%;height:100%;object-fit:cover}
+.v22-gamebody{padding:10px}.v22-gamebody strong{display:block;line-height:1.2}.v22-meta{color:var(--muted);font-size:11px;margin-top:5px;line-height:1.35}
+.v22-empty{background:var(--card);border:1px dashed #cfc9bd;border-radius:18px;padding:22px;text-align:center;color:var(--muted);grid-column:1/-1}
+.v22-shortcuts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}
+.v22-shortcut{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px;text-align:left}
+.v22-shortcut b{display:block;font-size:16px;margin-bottom:3px}.v22-shortcut span{font-size:12px;color:var(--muted)}
+@media(min-width:700px){.v22-results{grid-template-columns:repeat(5,1fr)}.v22-hero{padding:30px}.v22-filter{padding:18px}}
 </style>
 </head>
 <body>
 <div class="app">
-<header><div class="top"><span class="dice">🎲</span><button class="gear" onclick="show('settings')">⚙️</button></div><h1 id="title">Meine Brettspiele</h1><div class="sub" id="subtitle">Was wollen wir heute spielen? · Version 21</div></header>
+<header><div class="top"><span class="dice">🎲</span><button class="gear" onclick="show('settings')">⚙️</button></div><h1 id="title">Meine Brettspiele</h1><div class="sub" id="subtitle">Was spielen wir heute? · Version 22</div></header>
 <main class="content">
-<section id="home">
-  <div class="gamefinder-hero">
-    <h2>🎲 Was wollen wir heute spielen?</h2>
-    <p>Finde schnell das passende Spiel für euren Spieleabend.</p>
+<section id="home" class="home-v22">
+  <div class="v22-hero">
+    <h2>Was wollen wir heute spielen?</h2>
+    <p>Finde das passende Spiel für euren Spieleabend.</p>
   </div>
 
-  <div id="homePicked"></div>
+  <div id="v22Picked"></div>
 
-  <div class="finder-card">
-    <div class="finder-title">👥 Wie viele Spieler?</div>
-    <div class="finder-options" id="homePlayers">
-      <button class="finder-option active" data-value="" onclick="setHomeFilter('players',this)">Egal</button>
-      <button class="finder-option" data-value="2" onclick="setHomeFilter('players',this)">2</button>
-      <button class="finder-option" data-value="3" onclick="setHomeFilter('players',this)">3</button>
-      <button class="finder-option" data-value="4" onclick="setHomeFilter('players',this)">4</button>
-      <button class="finder-option" data-value="5" onclick="setHomeFilter('players',this)">5+</button>
+  <div class="v22-filter">
+    <div class="v22-filter-title">👥 Wie viele Spieler?</div>
+    <div class="v22-options" id="v22Players">
+      <button class="v22-opt" data-value="2" onclick="v22Set('players',this)">2</button>
+      <button class="v22-opt" data-value="3" onclick="v22Set('players',this)">3</button>
+      <button class="v22-opt active" data-value="4" onclick="v22Set('players',this)">4</button>
+      <button class="v22-opt" data-value="5" onclick="v22Set('players',this)">5+</button>
+      <button class="v22-opt" data-value="" onclick="v22Set('players',this)">Egal</button>
     </div>
   </div>
 
-  <div class="finder-card">
-    <div class="finder-title">⏱️ Wie viel Zeit?</div>
-    <div class="finder-options" id="homeTime">
-      <button class="finder-option active" data-value="" onclick="setHomeFilter('time',this)">Egal</button>
-      <button class="finder-option" data-value="15" onclick="setHomeFilter('time',this)">15 Min.</button>
-      <button class="finder-option" data-value="30" onclick="setHomeFilter('time',this)">30 Min.</button>
-      <button class="finder-option" data-value="60" onclick="setHomeFilter('time',this)">60 Min.</button>
-      <button class="finder-option" data-value="90" onclick="setHomeFilter('time',this)">90+ Min.</button>
+  <div class="v22-filter">
+    <div class="v22-filter-title">⏱️ Wie viel Zeit?</div>
+    <div class="v22-options" id="v22Time">
+      <button class="v22-opt" data-value="15" onclick="v22Set('time',this)">15 Min.</button>
+      <button class="v22-opt active" data-value="30" onclick="v22Set('time',this)">30 Min.</button>
+      <button class="v22-opt" data-value="60" onclick="v22Set('time',this)">60 Min.</button>
+      <button class="v22-opt" data-value="90" onclick="v22Set('time',this)">90+ Min.</button>
+      <button class="v22-opt" data-value="" onclick="v22Set('time',this)">Egal</button>
     </div>
   </div>
 
-  <div class="finder-card">
-    <div class="finder-title">🎭 Was für ein Spiel?</div>
-    <div class="finder-cats" id="homeCats"></div>
+  <div class="v22-filter">
+    <div class="v22-filter-title">🎭 Was für ein Spiel?</div>
+    <div class="v22-cats" id="v22Cats"></div>
   </div>
 
-  <div class="finder-actions">
-    <button class="btn finder-main" onclick="homePickGame()">🎲 Spiel auswählen</button>
-    <button class="finder-random" onclick="homePickGame(true)">🔀 Zufall</button>
+  <div class="v22-actions">
+    <button class="v22-mainbtn" onclick="v22Pick()">🎲 Spiel auswählen</button>
+    <button class="v22-random" onclick="v22Pick(true)">🔀 Zufall</button>
   </div>
 
-  <div class="finder-heading">
-    <h2>Passende Spiele für dich</h2>
-    <button onclick="show('library')">Mehr anzeigen →</button>
+  <div class="v22-heading">
+    <h2>Passende Spiele</h2>
+    <span id="v22Count"></span>
   </div>
-  <div id="homeMatches" class="finder-results"></div>
+  <div id="v22Results" class="v22-results"></div>
 
-  <div class="finder-picked" style="margin-top:14px;border-width:1px;background:#eaf5f0">
-    <div class="finder-picked-inner">
-      <div style="font-size:38px;text-align:center">💡</div>
-      <div>
-        <h3 style="font-size:18px">Noch unsicher?</h3>
-        <div class="muted">Lass dich von einem zufälligen Spiel aus deiner Sammlung überraschen.</div>
-        <button class="btn" onclick="quickRandom()">🎲 Überrasch mich!</button>
-      </div>
-    </div>
+  <div class="v22-shortcuts">
+    <button class="v22-shortcut" onclick="show('favorites')"><b>❤️ Meine Favoriten</b><span>Deine Lieblingsspiele</span></button>
+    <button class="v22-shortcut" onclick="show('library')"><b>📚 Meine Sammlung</b><span id="v22CollectionCount">56 Spiele</span></button>
   </div>
 </section>
 
@@ -256,98 +251,86 @@ function renderChips(){let all=[...new Set(games.flatMap(g=>catsOf(g)))];documen
 function chip(el){document.querySelectorAll("#chips .chip").forEach(x=>x.classList.remove("active"));el.classList.add("active");renderLibrary()}
 function renderGrid(id,arr){document.getElementById(id).innerHTML=arr.length?arr.map(card).join(""):`<div class="empty">Noch nichts vorhanden.</div>`}
 
-const homeFilter={players:"",time:"",cats:[]};
+const v22State={players:"4",time:"30",cats:[]};
 
-function playerRange(g){
+function v22PlayersOK(g){
+  const want=v22State.players;
+  if(!want)return true;
   const nums=(String(g.players).match(/\d+/g)||[]).map(Number);
-  if(!nums.length)return [1,99];
-  if(String(g.players).includes("–")||String(g.players).includes("-"))return [nums[0],nums[1]||nums[0]];
-  return [nums[0],nums[0]];
+  if(!nums.length)return false;
+  if(want==="5")return Math.max(...nums)>=5;
+  if(nums.length>=2)return +want>=nums[0]&&+want<=nums[1];
+  return +want===nums[0];
 }
-function homeMatches(){
-  const p=homeFilter.players;
-  const t=+homeFilter.time||99999;
-  return games.filter(g=>{
-    const [min,max]=playerRange(g);
-    const playerOK=!p||(p==="5"?max>=5:(+p>=min&&+p<=max));
-    const timeOK=g.time<=t;
-    const catOK=!homeFilter.cats.length||homeFilter.cats.some(c=>catsOf(g).includes(c));
-    return playerOK&&timeOK&&catOK;
-  });
+function v22Matches(){
+  const t=v22State.time?+v22State.time:9999;
+  return games.filter(g=>v22PlayersOK(g)&&g.time<=t&&(!v22State.cats.length||v22State.cats.some(c=>catsOf(g).includes(c))));
 }
-function homeCover(g){
-  return g.cover
-    ? `<img src="${g.cover}" alt="${esc(g.name)}">`
-    : esc(g.name);
+function v22Set(type,el){
+  v22State[type]=el.dataset.value;
+  const group=type==="players"?"v22Players":"v22Time";
+  document.querySelectorAll("#"+group+" .v22-opt").forEach(b=>b.classList.remove("active"));
+  el.classList.add("active");
+  document.getElementById("v22Picked").innerHTML="";
+  v22Render();
 }
-function homeGameCard(g){
-  return `<article class="finder-game" onclick="openDetails(${g.id})">
-    <div class="finder-cover">${homeCover(g)}</div>
-    <div class="finder-gamebody">
+function v22ToggleCat(cat){
+  if(v22State.cats.includes(cat))v22State.cats=v22State.cats.filter(c=>c!==cat);
+  else v22State.cats.push(cat);
+  document.getElementById("v22Picked").innerHTML="";
+  v22Render();
+}
+function v22RenderCats(){
+  const cats=[...new Set(games.flatMap(g=>catsOf(g)))];
+  document.getElementById("v22Cats").innerHTML=
+    `<button class="v22-cat ${v22State.cats.length?"":"active"}" onclick="v22State.cats=[];v22Render()">Egal</button>`+
+    cats.map(c=>`<button class="v22-cat ${v22State.cats.includes(c)?"active":""}" onclick="v22ToggleCat('${esc(c)}')">${esc(c)}</button>`).join("");
+}
+function v22Card(g){
+  const cover=g.cover?`<img src="${g.cover}" alt="${esc(g.name)}">`:esc(g.name);
+  return `<article class="v22-game" onclick="openDetails(${g.id})">
+    <div class="v22-cover">${cover}</div>
+    <div class="v22-gamebody">
       <strong>${esc(g.name)}</strong>
-      <div class="finder-meta">👥 ${esc(g.players)} · ⏱️ ${g.time} Min.</div>
-      <div class="finder-meta">${esc(catText(g))}</div>
+      <div class="v22-meta">👥 ${esc(g.players)} · ⏱️ ${g.time} Min.</div>
+      <div class="v22-meta">🏷️ ${esc(catText(g))}</div>
     </div>
   </article>`;
 }
-function renderHomeFilters(){
-  const cats=[...new Set(games.flatMap(g=>catsOf(g)))];
-  document.getElementById("homeCats").innerHTML=
-    `<button class="finder-cat ${homeFilter.cats.length===0?"active":""}" onclick="clearHomeCats()">Egal</button>`+
-    cats.map(c=>`<button class="finder-cat ${homeFilter.cats.includes(c)?"active":""}" onclick="toggleHomeCat('${esc(c)}',this)">${esc(c)}</button>`).join("");
+function v22Render(){
+  v22RenderCats();
+  const arr=v22Matches();
+  document.getElementById("v22Count").textContent=`${arr.length} gefunden`;
+  document.getElementById("v22Results").innerHTML=arr.length
+    ?arr.slice(0,10).map(v22Card).join("")
+    :`<div class="v22-empty">😕<br><b>Kein passendes Spiel gefunden.</b><br>Versuch es mit etwas mehr Zeit oder anderen Filtern.</div>`;
+  document.getElementById("v22CollectionCount").textContent=`${games.length} Spiele`;
 }
-function renderHomeMatches(){
-  renderHomeFilters();
-  const a=homeMatches();
-  const el=document.getElementById("homeMatches");
-  el.innerHTML=a.length?a.slice(0,8).map(homeGameCard).join(""):`<div class="finder-empty" style="grid-column:1/-1">😕<br><b>Kein passendes Spiel gefunden.</b><br>Versuch es mit etwas mehr Zeit oder anderen Filtern.</div>`;
-}
-function setHomeFilter(type,el){
-  homeFilter[type]=el.dataset.value;
-  document.querySelectorAll("#home"+(type==="players"?"Players":"Time")+" .finder-option").forEach(b=>b.classList.remove("active"));
-  el.classList.add("active");
-  document.getElementById("homePicked").innerHTML="";
-  renderHomeMatches();
-}
-function clearHomeCats(){
-  homeFilter.cats=[];
-  renderHomeMatches();
-}
-function toggleHomeCat(cat,el){
-  if(homeFilter.cats.includes(cat))homeFilter.cats=homeFilter.cats.filter(c=>c!==cat);
-  else homeFilter.cats.push(cat);
-  document.getElementById("homePicked").innerHTML="";
-  renderHomeMatches();
-}
-function homePickGame(ignoreFilters=false){
-  const a=ignoreFilters?games:homeMatches();
-  const out=document.getElementById("homePicked");
-  if(!a.length){
-    out.innerHTML=`<div class="finder-empty">😕<br><b>Kein passendes Spiel gefunden.</b><br>Versuch es mit etwas mehr Zeit oder anderen Filtern.</div>`;
+function v22Pick(ignoreFilters=false){
+  const arr=ignoreFilters?games:v22Matches();
+  const out=document.getElementById("v22Picked");
+  if(!arr.length){
+    out.innerHTML=`<div class="v22-picked"><div class="empty">😕<br><b>Kein passendes Spiel gefunden.</b><br>Versuch es mit etwas mehr Zeit oder anderen Filtern.</div></div>`;
     return;
   }
-  const g=a[Math.floor(Math.random()*a.length)];
-  out.innerHTML=`<div class="finder-picked">
-    <div class="finder-picked-inner">
-      <div class="finder-picked-cover">${homeCover(g)}</div>
+  const g=arr[Math.floor(Math.random()*arr.length)];
+  const cover=g.cover?`<img src="${g.cover}" alt="${esc(g.name)}">`:esc(g.name);
+  out.innerHTML=`<div class="v22-picked">
+    <div class="v22-picked-inner">
+      <div class="v22-picked-cover">${cover}</div>
       <div>
-        <div class="muted">🎲 Euer Vorschlag</div>
+        <div class="muted">🎲 Euer Spiel ist …</div>
         <h3>${esc(g.name)}</h3>
-        <div class="finder-meta">👥 ${esc(g.players)} · ⏱️ ca. ${g.time} Min.</div>
-        <div class="finder-meta">🏷️ ${esc(catText(g))} · 🧠 ${esc(g.diff)}</div>
-        <button class="btn" onclick="openDetails(${g.id})">Details →</button>
-        <button class="btn secondary" onclick="homePickGame(${ignoreFilters})">Noch einmal</button>
+        <div class="v22-meta">👥 ${esc(g.players)} · ⏱️ ca. ${g.time} Min.</div>
+        <div class="v22-meta">🏷️ ${esc(catText(g))} · 🧠 ${esc(g.diff)}</div>
+        ${g.rating?`<div class="rating">⭐ ${g.rating}/5</div>`:""}
+        <button class="btn" onclick="openDetails(${g.id})">Details ansehen →</button>
+        <button class="btn secondary" onclick="v22Pick(${ignoreFilters})">↻ Noch einmal</button>
       </div>
     </div>
   </div>`;
 }
-function resetHomeFilters(){
-  homeFilter.players="";
-  homeFilter.time="";
-  homeFilter.cats=[];
-  document.getElementById("homePicked").innerHTML="";
-}
-function renderAll(){renderHomeMatches();renderChips();renderLibrary();renderGrid("favGrid",games.filter(g=>g.fav));renderGrid("recentGrid",[...games].sort((a,b)=>(b.last||"").localeCompare(a.last||"")).slice(0,8));document.getElementById("countTile").textContent=`${games.length} Spiele in deiner Sammlung`;let catsel=document.getElementById("rCat");if(catsel)catsel.innerHTML='<option value="">egal</option>'+[...new Set(games.flatMap(g=>catsOf(g)))].map(c=>`<option>${c}</option>`).join("");renderStats();}
+function renderAll(){v22Render();renderChips();renderLibrary();renderGrid("favGrid",games.filter(g=>g.fav));renderGrid("recentGrid",[...games].sort((a,b)=>(b.last||"").localeCompare(a.last||"")).slice(0,8));document.getElementById("countTile").textContent=`${games.length} Spiele in deiner Sammlung`;let catsel=document.getElementById("rCat");if(catsel)catsel.innerHTML='<option value="">egal</option>'+[...new Set(games.flatMap(g=>catsOf(g)))].map(c=>`<option>${c}</option>`).join("");renderStats();}
 function played(id){let g=games.find(x=>x.id===id);g.plays++;g.last=new Date().toISOString().slice(0,10);save();alert(`✓ ${g.name} als gespielt markiert.`);renderAll();}
 function quickRandom(){
   if(!games.length)return;
