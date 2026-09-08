@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#173b2a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Meine Spiele">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <title>Meine Spiele</title>
+  <style>
+    :root{--green:#173b2a;--green2:#2f7350;--cream:#f5f0e7;--card:#fffdf8;--text:#172019;--muted:#6d756f;--line:#ddd8cc;--accent:#d7ead8}
+    *{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
+    button,input,select{font:inherit}button{border:0;cursor:pointer}.app{min-height:100vh;background:linear-gradient(180deg,var(--green) 0 27%,var(--cream) 27% 100%);padding-bottom:84px}
+    header{color:white;padding:24px 18px 26px;padding-top:calc(20px + env(safe-area-inset-top));max-width:900px;margin:auto}
+    header .top{display:flex;justify-content:space-between;align-items:center}.dice{font-size:30px}.gear{background:#ffffff18;color:white;border-radius:50%;width:42px;height:42px}
+    h1{font-size:25px;margin:22px 0 4px}.sub{opacity:.78;font-size:14px}.content{max-width:900px;margin:auto;padding:18px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.tile{background:var(--card);border:1px solid #e7e1d6;border-radius:20px;padding:18px;min-height:118px;text-align:left;box-shadow:0 5px 18px #00000009}
+    .tile .ico{font-size:25px}.tile strong{display:block;margin-top:12px;font-size:16px}.tile small{display:block;color:var(--muted);margin-top:4px}
+    .panel{background:var(--card);border-radius:22px;padding:16px;margin-bottom:14px;border:1px solid #e5dfd3}.row{display:flex;gap:10px;align-items:center}.between{justify-content:space-between}
+    .search{width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:14px;background:white;outline:none}.chips{display:flex;gap:8px;overflow:auto;padding:8px 0 2px}.chip{white-space:nowrap;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:white}.chip.active{background:var(--green);color:white;border-color:var(--green)}
+    .games{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.game{background:white;border-radius:17px;overflow:hidden;border:1px solid #e3ddd1}.cover{height:150px;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:22px;text-align:center;padding:12px;background:linear-gradient(135deg,#6b8f71,#274b38)}.game:nth-child(3n+2) .cover{background:linear-gradient(135deg,#b56d4b,#6f3429)}.game:nth-child(3n) .cover{background:linear-gradient(135deg,#4f78a4,#253d5b)}
+    .gamebody{padding:10px}.gamebody strong{display:block}.meta{color:var(--muted);font-size:12px;margin-top:4px}.fav{float:right;color:#b85b50}
+    .btn{background:var(--green);color:white;border-radius:13px;padding:12px 15px}.btn.secondary{background:#e9eee8;color:var(--green)}.btn.full{width:100%;margin-top:10px}
+    .filters label{font-size:12px;color:var(--muted);display:block;margin-bottom:5px}.filters select{width:100%;padding:11px;border:1px solid var(--line);border-radius:12px;background:white}
+    .formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.formgrid>div:first-child{grid-column:1/-1}.field{width:100%;padding:11px;border:1px solid var(--line);border-radius:12px;background:white}
+    .hidden{display:none!important}.nav{position:fixed;bottom:0;left:0;right:0;background:#fffdf9eF;border-top:1px solid #ddd8cc;backdrop-filter:blur(15px);display:flex;justify-content:center;gap:8px;padding:9px max(10px,env(safe-area-inset-left)) calc(9px + env(safe-area-inset-bottom));z-index:5}.nav button{background:transparent;padding:7px 15px;color:#69716b;font-size:11px}.nav button b{display:block;font-size:19px;margin-bottom:2px}.nav button.active{color:var(--green)}
+    .result{text-align:center}.result .bigcover{height:240px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:800;color:white;background:linear-gradient(135deg,#4f78a4,#253d5b);margin-bottom:15px}
+    .statgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:white;border-radius:15px;padding:14px}.stat b{font-size:24px;display:block}.muted{color:var(--muted)}.empty{text-align:center;padding:30px;color:var(--muted)}
+    @media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}.games{grid-template-columns:repeat(4,1fr)}}
+  </style>
+</head>
+<body>
+<div class="app">
+<header><div class="top"><span class="dice">🎲</span><button class="gear" onclick="show('settings')">⚙️</button></div><h1 id="title">Schön, dass du da bist!</h1><div class="sub" id="subtitle">Deine persönliche Brettspiel-Sammlung</div></header>
+<main class="content">
+<section id="home">
+  <div class="grid">
+    <button class="tile" onclick="show('random')"><span class="ico">🎲</span><strong>Was soll ich spielen?</strong><small>Spiel zufällig auswählen</small></button>
+    <button class="tile" onclick="show('library')"><span class="ico">📚</span><strong>Meine Spiele</strong><small id="countTile">Alle auf einen Blick</small></button>
+    <button class="tile" onclick="show('favorites')"><span class="ico">⭐</span><strong>Favoriten</strong><small>Deine Lieblingsspiele</small></button>
+    <button class="tile" onclick="show('recent')"><span class="ico">🕐</span><strong>Zuletzt gespielt</strong><small>Was war zuletzt dran?</small></button>
+    <button class="tile" onclick="show('stats')"><span class="ico">📊</span><strong>Statistik</strong><small>Deine Spielmomente</small></button>
+    <button class="tile" onclick="show('add')"><span class="ico">➕</span><strong>Spiel hinzufügen</strong><small>Neues Spiel eintragen</small></button>
+  </div>
+</section>
+
+<section id="library" class="hidden"><div class="panel"><input id="search" class="search" placeholder="🔎 Spiele suchen …" oninput="renderLibrary()"><div class="chips" id="chips"></div></div><div id="gameGrid" class="games"></div></section>
+<section id="random" class="hidden"><div class="panel filters"><h2>🎲 Was möchtest du spielen?</h2><p class="muted">Setze ein paar Kriterien – oder lass dich komplett überraschen.</p><div class="formgrid">
+<div><label>Spieler</label><select id="rPlayers"><option value="">egal</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option></select></div>
+<div><label>Max. Spieldauer</label><select id="rTime"><option value="">egal</option><option value="30">30 min</option><option value="60">60 min</option><option value="120">120 min</option></select></div>
+<div><label>Kategorie</label><select id="rCat"><option value="">egal</option></select></div>
+<div><label>Schwierigkeit</label><select id="rDiff"><option value="">egal</option><option>leicht</option><option>mittel</option><option>schwer</option></select></div>
+</div><button class="btn full" onclick="pickRandom()">🎲 Überrasche mich!</button></div><div id="randomResult"></div></section>
+
+<section id="favorites" class="hidden"><div class="panel"><h2>⭐ Favoriten</h2></div><div id="favGrid" class="games"></div></section>
+<section id="recent" class="hidden"><div class="panel"><h2>🕐 Zuletzt gespielt</h2></div><div id="recentGrid" class="games"></div></section>
+<section id="stats" class="hidden"><div class="panel"><h2>📊 Statistik</h2><p class="muted">Deine Spielmomente in Zahlen</p><div class="statgrid" id="statsGrid"></div></div><div class="panel"><h3>Am häufigsten gespielt</h3><div id="topGames"></div></div></section>
+<section id="add" class="hidden"><div class="panel"><h2>➕ Neues Spiel</h2><div class="formgrid">
+<div><label>Name</label><input id="fName" class="field" placeholder="z. B. Azul"></div>
+<div><label>Spieler</label><input id="fPlayers" class="field" placeholder="2–4"></div>
+<div><label>Spieldauer (Min.)</label><input id="fTime" class="field" type="number" placeholder="45"></div>
+<div><label>Kategorie</label><input id="fCat" class="field" placeholder="Strategie"></div>
+<div><label>Schwierigkeit</label><select id="fDiff" class="field"><option>leicht</option><option selected>mittel</option><option>schwer</option></select></div>
+<div><label>Bewertung</label><select id="fRating" class="field"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></div>
+</div><button class="btn full" onclick="addGame()">Spiel speichern</button></div></section>
+<section id="settings" class="hidden"><div class="panel"><h2>⚙️ Einstellungen</h2><p class="muted">Die Sammlung wird ausschließlich in diesem Browser auf deinem Gerät gespeichert.</p><button class="btn secondary full" onclick="exportData()">📤 Sammlung exportieren</button><button class="btn secondary full" onclick="importData()">📥 Sammlung importieren</button><button class="btn full" onclick="resetData()">Sammlung auf Beispieldaten zurücksetzen</button></div></section>
+</main>
+<nav class="nav"><button onclick="show('home')" id="navhome" class="active"><b>⌂</b>Start</button><button onclick="show('library')" id="navlibrary"><b>▦</b>Spiele</button><button onclick="show('random')" id="navrandom"><b>⚒</b>Zufall</button><button onclick="show('stats')" id="navstats"><b>▥</b>Statistik</button></nav>
+</div>
+<script>
+const seed=[
+{id:1,name:"Catan",players:"3–4",time:75,cat:"Strategie",diff:"mittel",rating:5,plays:10,fav:true,last:"2026-08-28"},
+{id:2,name:"Azul",players:"2–4",time:45,cat:"Familie",diff:"leicht",rating:5,plays:7,fav:true,last:"2026-09-02"},
+{id:3,name:"Dorfromantik",players:"1–6",time:45,cat:"Kooperativ",diff:"leicht",rating:4,plays:5,fav:false,last:"2026-08-31"},
+{id:4,name:"Cascadia",players:"1–4",time:45,cat:"Strategie",diff:"mittel",rating:5,plays:4,fav:true,last:"2026-08-20"},
+{id:5,name:"Skyjo",players:"2–8",time:30,cat:"Kartenspiel",diff:"leicht",rating:4,plays:12,fav:false,last:"2026-09-05"},
+{id:6,name:"The Crew",players:"2–5",time:25,cat:"Kartenspiel",diff:"mittel",rating:5,plays:8,fav:true,last:"2026-08-25"},
+{id:7,name:"Flügelschlag",players:"1–5",time:70,cat:"Strategie",diff:"schwer",rating:4,plays:3,fav:false,last:"2026-07-12"},
+{id:8,name:"Machi Koro",players:"2–4",time:35,cat:"Kartenspiel",diff:"leicht",rating:4,plays:6,fav:false,last:"2026-08-10"}
+];
+let games=JSON.parse(localStorage.getItem("myBoardGames")||"null")||seed;
+let cats=["Strategie","Familie","Party","Kartenspiel","Kooperativ","Duell","Für 2 Spieler","Schnell"];
+function save(){localStorage.setItem("myBoardGames",JSON.stringify(games));}
+function show(id){document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));let n=document.getElementById("nav"+id);if(n)n.classList.add("active");document.getElementById("title").textContent=id==="home"?"Schön, dass du da bist!":({library:"Meine Spiele",random:"Zufallsauswahl",favorites:"Favoriten",recent:"Zuletzt gespielt",stats:"Statistik",add:"Spiel hinzufügen",settings:"Einstellungen"}[id]||"Meine Spiele");renderAll();}
+function coverClass(i){return i%3===1?"":" c2"}
+function card(g,i){return `<article class="game"><div class="cover">${g.name}<span class="fav">${g.fav?"♥":""}</span></div><div class="gamebody"><strong>${g.name}</strong><div class="meta">👥 ${g.players} · ⏱️ ${g.time} min</div><div class="meta">⭐ ${g.rating}/5 · ${g.cat}</div><button class="btn secondary full" onclick="played(${g.id})">Als gespielt markieren</button></div></article>`}
+function renderLibrary(){let q=(document.getElementById("search")?.value||"").toLowerCase();let active=document.querySelector("#chips .active")?.dataset.cat||"";let arr=games.filter(g=>(!q||g.name.toLowerCase().includes(q))&&(!active||g.cat===active));document.getElementById("gameGrid").innerHTML=arr.length?arr.map(card).join(""):`<div class="empty">Keine Spiele gefunden.</div>`}
+function renderChips(){let all=[...new Set(games.map(g=>g.cat))];document.getElementById("chips").innerHTML=`<button class="chip active" data-cat="" onclick="chip(this)">Alle</button>`+all.map(c=>`<button class="chip" data-cat="${c}" onclick="chip(this)">${c}</button>`).join("")}
+function chip(el){document.querySelectorAll("#chips .chip").forEach(x=>x.classList.remove("active"));el.classList.add("active");renderLibrary()}
+function renderGrid(id,arr){document.getElementById(id).innerHTML=arr.length?arr.map(card).join(""):`<div class="empty">Noch nichts vorhanden.</div>`}
+function renderAll(){renderChips();renderLibrary();renderGrid("favGrid",games.filter(g=>g.fav));renderGrid("recentGrid",[...games].sort((a,b)=>(b.last||"").localeCompare(a.last||"")).slice(0,8));document.getElementById("countTile").textContent=`${games.length} Spiele in deiner Sammlung`;let catsel=document.getElementById("rCat");if(catsel)catsel.innerHTML='<option value="">egal</option>'+[...new Set(games.map(g=>g.cat))].map(c=>`<option>${c}</option>`).join("");renderStats();}
+function played(id){let g=games.find(x=>x.id===id);g.plays++;g.last=new Date().toISOString().slice(0,10);save();alert(`✓ ${g.name} als gespielt markiert.`);renderAll();}
+function pickRandom(){let p=document.getElementById("rPlayers").value,t=+document.getElementById("rTime").value||9999,c=document.getElementById("rCat").value,d=document.getElementById("rDiff").value;let a=games.filter(g=>(!p||g.players.includes(p)||p==="5+"&&g.players.includes("5"))&&g.time<=t&&(!c||g.cat===c)&&(!d||g.diff===d));let out=document.getElementById("randomResult");if(!a.length){out.innerHTML='<div class="panel empty">Für diese Kriterien habe ich kein passendes Spiel gefunden. Versuch es mit etwas weniger Filtern.</div>';return}let g=a[Math.floor(Math.random()*a.length)];out.innerHTML=`<div class="panel result"><div class="bigcover">${g.name}</div><h2>${g.name}</h2><p class="muted">👥 ${g.players} · ⏱️ ca. ${g.time} min · ⭐ ${g.rating}/5 · 🏷️ ${g.cat}</p><button class="btn full" onclick="played(${g.id})">▶ Dieses Spiel spielen!</button><button class="btn secondary full" onclick="pickRandom()">↻ Noch einmal</button></div>`}
+function addGame(){let name=document.getElementById("fName").value.trim();if(!name){alert("Bitte einen Namen eingeben.");return}games.push({id:Date.now(),name,players:document.getElementById("fPlayers").value||"2–4",time:+document.getElementById("fTime").value||60,cat:document.getElementById("fCat").value.trim()||"Sonstiges",diff:document.getElementById("fDiff").value,rating:+document.getElementById("fRating").value,plays:0,fav:false,last:""});save();["fName","fPlayers","fTime","fCat"].forEach(x=>document.getElementById(x).value="");show("library");}
+function renderStats(){let total=games.reduce((a,g)=>a+g.plays,0),hours=Math.round(games.reduce((a,g)=>a+g.plays*g.time,0)/60);document.getElementById("statsGrid").innerHTML=`<div class="stat">🎲<b>${games.length}</b><span class="muted">Spiele insgesamt</span></div><div class="stat">⭐<b>${total}</b><span class="muted">Partien gespielt</span></div><div class="stat">⏱️<b>${hours} h</b><span class="muted">Spielzeit</span></div><div class="stat">🏷️<b>${new Set(games.map(g=>g.cat)).size}</b><span class="muted">Kategorien</span></div>`;document.getElementById("topGames").innerHTML=[...games].sort((a,b)=>b.plays-a.plays).slice(0,5).map((g,i)=>`<div class="row between" style="padding:9px 0;border-bottom:1px solid #eee"><span>${i+1}. ${g.name}</span><b>${g.plays}×</b></div>`).join("")}
+function exportData(){let blob=new Blob([JSON.stringify(games,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="meine-brettspiele.json";a.click();URL.revokeObjectURL(a.href)}
+function importData(){let i=document.createElement("input");i.type="file";i.accept=".json";i.onchange=()=>{let r=new FileReader();r.onload=()=>{try{games=JSON.parse(r.result);save();renderAll();alert("Sammlung importiert.");}catch(e){alert("Datei konnte nicht gelesen werden.")}};r.readAsText(i.files[0])};i.click()}
+function resetData(){if(confirm("Beispieldaten wiederherstellen?")){games=seed;save();renderAll();}}
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
+renderAll();
+</script>
+</body></html>

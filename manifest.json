@@ -1,0 +1,10 @@
+{
+  "name":"Meine Brettspiel-Sammlung",
+  "short_name":"Meine Spiele",
+  "start_url":".",
+  "display":"standalone",
+  "background_color":"#f5f0e7",
+  "theme_color":"#173b2a",
+  "lang":"de",
+  "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
