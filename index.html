@@ -32,11 +32,11 @@
     @media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}.games{grid-template-columns:repeat(4,1fr)}}
   
 .gameclick{cursor:pointer}.detailcover{height:220px;border-radius:20px;display:flex;align-items:center;justify-content:center;color:white;font-size:34px;font-weight:800;text-align:center;padding:20px;background:linear-gradient(135deg,#6b8f71,#274b38);margin-bottom:15px}.detailgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.detailitem{background:white;border-radius:14px;padding:12px}.detailitem b{display:block;font-size:12px;color:var(--muted);margin-bottom:3px}.starbtn{background:#fff1b8;border-radius:12px;padding:10px}.danger{background:#f4d9d5!important;color:#8d3026!important}
-.game button{position:relative;z-index:2}.game .btn{display:block}.\n.chips{scrollbar-width:none}.chips::-webkit-scrollbar{display:none}.detailcover{box-shadow:inset 0 0 0 1px #ffffff18}.gamebody .meta{line-height:1.45}</style>
+.game button{position:relative;z-index:2}.game .btn{display:block}.\n.chips{scrollbar-width:none}.chips::-webkit-scrollbar{display:none}.detailcover{box-shadow:inset 0 0 0 1px #ffffff18}.gamebody .meta{line-height:1.45}.coverimage{padding:0!important;overflow:hidden}.coverimage img{width:100%;height:100%;object-fit:cover;display:block}.coverwrap{height:150px}.coverwrap .cover{height:150px}.detailcover.coverimage{height:220px}.detailcover.coverimage img{object-fit:contain;background:#eee}.coverimage .fav{position:absolute;right:8px;top:8px}.cover{position:relative}</style>
 </head>
 <body>
 <div class="app">
-<header><div class="top"><span class="dice">🎲</span><button class="gear" onclick="show('settings')">⚙️</button></div><h1 id="title">Schön, dass du da bist!</h1><div class="sub" id="subtitle">Deine persönliche Brettspiel-Sammlung · Version 7</div></header>
+<header><div class="top"><span class="dice">🎲</span><button class="gear" onclick="show('settings')">⚙️</button></div><h1 id="title">Schön, dass du da bist!</h1><div class="sub" id="subtitle">Deine persönliche Brettspiel-Sammlung · Version 8</div></header>
 <main class="content">
 <section id="home">
   <div class="grid">
@@ -82,11 +82,25 @@ const CATEGORY_OPTIONS=["Kartenspiel","Würfelspiel","Strategie","Party","Famili
 games.forEach(g=>{if(!Array.isArray(g.categories))g.categories=[g.cat];});
 function catsOf(g){return Array.isArray(g.categories)&&g.categories.length?g.categories:[g.cat];}
 function catText(g){return catsOf(g).join(" · ");}
+const COVER_MAP={
+"Skullqueen":"assets/skullqueen.jpg",
+"Rummy":"assets/rummy.jpg",
+"Risiko":"assets/risiko.jpg",
+"Humanity":"assets/humanity.jpg",
+"Magnetic":"assets/magnetic.jpg",
+"99 Games":"assets/99games.jpg",
+"Fiasco":"assets/fiasco.jpg",
+"Rummikub":"assets/rummikub_wort.jpg",
+"Würfel Ligretto":"assets/wuerfel_ligretto.jpg",
+"Kampf gegen die Korinthenkacker":"assets/korinthenkacker.jpg"
+};
+games.forEach(g=>{if(!g.cover&&COVER_MAP[g.name])g.cover=COVER_MAP[g.name];});
+function coverHTML(g,large=false){return g.cover?`<div class="${large?'detailcover':'cover'} coverimage"><img src="${g.cover}" alt="${esc(g.name)}">${!large?`<span class="fav">${g.fav?"♥":""}</span>`:""}</div>`:`<div class="${large?'detailcover':'cover'}">${g.name}${!large?`<span class="fav">${g.fav?"♥":""}</span>`:""}</div>`;}
 
 function save(){localStorage.setItem("myBoardGames",JSON.stringify(games));}
 function show(id){document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));let n=document.getElementById("nav"+id);if(n)n.classList.add("active");document.getElementById("title").textContent=id==="home"?"Schön, dass du da bist!":({library:"Meine Spiele",random:"Zufallsauswahl",favorites:"Favoriten",recent:"Zuletzt gespielt",stats:"Statistik",add:"Spiel hinzufügen",settings:"Einstellungen"}[id]||"Meine Spiele");renderAll();}
 function coverClass(i){return i%3===1?"":" c2"}
-function card(g,i){return `<article class="game"><div class="cover">${g.name}<span class="fav">${g.fav?"♥":""}</span></div><div class="gamebody"><strong>${g.name}</strong><div class="meta">👥 ${g.players} · ⏱️ ${g.time} min</div><div class="meta">⭐ ${g.rating?g.rating+"/5":"noch nicht bewertet"} · ${catText(g)}</div><button class="btn full" onclick="openDetails(${g.id})">Details →</button><button class="btn secondary full" onclick="played(${g.id})">Als gespielt markieren</button></div></article>`}
+function card(g,i){return `<article class="game"><div class="coverwrap">${coverHTML(g)}</div><div class="gamebody"><strong>${g.name}</strong><div class="meta">👥 ${g.players} · ⏱️ ${g.time} min</div><div class="meta">⭐ ${g.rating?g.rating+"/5":"noch nicht bewertet"} · ${catText(g)}</div><button class="btn full" onclick="openDetails(${g.id})">Details →</button><button class="btn secondary full" onclick="played(${g.id})">Als gespielt markieren</button></div></article>`}
 function renderLibrary(){let q=(document.getElementById("search")?.value||"").toLowerCase();let active=document.querySelector("#chips .active")?.dataset.cat||"";let arr=games.filter(g=>(!q||g.name.toLowerCase().includes(q))&&(!active||g.cat===active));document.getElementById("gameGrid").innerHTML=arr.length?arr.map(card).join(""):`<div class="empty">Keine Spiele gefunden.</div>`}
 function renderChips(){let all=[...new Set(games.flatMap(g=>catsOf(g)))];document.getElementById("chips").innerHTML=`<button class="chip active" data-cat="" onclick="chip(this)">Alle</button>`+all.map(c=>`<button class="chip" data-cat="${c}" onclick="chip(this)">${c}</button>`).join("")}
 function chip(el){document.querySelectorAll("#chips .chip").forEach(x=>x.classList.remove("active"));el.classList.add("active");renderLibrary()}
@@ -122,7 +136,7 @@ function openDetails(id){
   const stars="★".repeat(g.rating||0)+"☆".repeat(5-(g.rating||0));
   document.getElementById("detailContent").innerHTML=`
   <div class="panel">
-    <div class="detailcover">${g.name}</div>
+    ${coverHTML(g,true)}
     <h2>${g.name} ${g.fav?"❤️":""}</h2>
     <div class="detailgrid">
       <div class="detailitem"><b>👥 Spieler</b>${g.players}</div>
