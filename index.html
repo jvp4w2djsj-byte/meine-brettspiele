@@ -36,11 +36,11 @@
 </head>
 <body>
 <div class="app">
-<header><div class="top"><span class="dice">🎲</span><button class="gear" onclick="show('settings')">⚙️</button></div><h1 id="title">Schön, dass du da bist!</h1><div class="sub" id="subtitle">Deine persönliche Brettspiel-Sammlung · Version 5</div></header>
+<header><div class="top"><span class="dice">🎲</span><button class="gear" onclick="show('settings')">⚙️</button></div><h1 id="title">Schön, dass du da bist!</h1><div class="sub" id="subtitle">Deine persönliche Brettspiel-Sammlung · Version 6</div></header>
 <main class="content">
 <section id="home">
   <div class="grid">
-    <button class="tile" onclick="show('random')"><span class="ico">🎲</span><strong>Was soll ich spielen?</strong><small>Spiel zufällig auswählen</small></button>
+    <button class="tile" onclick="quickRandom()"><span class="ico">🎲</span><strong>Überrasch mich!</strong><small>Ein Spiel komplett zufällig auswählen</small></button>
     <button class="tile" onclick="show('library')"><span class="ico">📚</span><strong>Meine Spiele</strong><small id="countTile">Alle auf einen Blick</small></button>
     <button class="tile" onclick="show('favorites')"><span class="ico">⭐</span><strong>Favoriten</strong><small>Deine Lieblingsspiele</small></button>
     <button class="tile" onclick="show('recent')"><span class="ico">🕐</span><strong>Zuletzt gespielt</strong><small>Was war zuletzt dran?</small></button>
@@ -88,6 +88,16 @@ function chip(el){document.querySelectorAll("#chips .chip").forEach(x=>x.classLi
 function renderGrid(id,arr){document.getElementById(id).innerHTML=arr.length?arr.map(card).join(""):`<div class="empty">Noch nichts vorhanden.</div>`}
 function renderAll(){renderChips();renderLibrary();renderGrid("favGrid",games.filter(g=>g.fav));renderGrid("recentGrid",[...games].sort((a,b)=>(b.last||"").localeCompare(a.last||"")).slice(0,8));document.getElementById("countTile").textContent=`${games.length} Spiele in deiner Sammlung`;let catsel=document.getElementById("rCat");if(catsel)catsel.innerHTML='<option value="">egal</option>'+[...new Set(games.map(g=>g.cat))].map(c=>`<option>${c}</option>`).join("");renderStats();}
 function played(id){let g=games.find(x=>x.id===id);g.plays++;g.last=new Date().toISOString().slice(0,10);save();alert(`✓ ${g.name} als gespielt markiert.`);renderAll();}
+function quickRandom(){
+  if(!games.length)return;
+  document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
+  document.getElementById("random").classList.remove("hidden");
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+  document.getElementById("title").textContent="🎲 Überrasch mich!";
+  document.getElementById("subtitle").textContent="Zufällig aus deiner gesamten Sammlung";
+  const g=games[Math.floor(Math.random()*games.length)];
+  document.getElementById("randomResult").innerHTML=`<div class="panel result"><div class="bigcover">${g.name}</div><h2>${g.name}</h2><p class="muted">👥 ${g.players} · ⏱️ ca. ${g.time} min · ${g.cat}</p><button class="btn full" onclick="played(${g.id})">▶ Dieses Spiel spielen!</button><button class="btn secondary full" onclick="quickRandom()">🎲 Noch einmal</button><button class="btn secondary full" onclick="openDetails(${g.id})">Details →</button></div>`;
+}
 function pickRandom(){let p=document.getElementById("rPlayers").value,t=+document.getElementById("rTime").value||9999,c=document.getElementById("rCat").value,d=document.getElementById("rDiff").value;let a=games.filter(g=>(!p||g.players.includes(p)||p==="5+"&&g.players.includes("5"))&&g.time<=t&&(!c||g.cat===c)&&(!d||g.diff===d));let out=document.getElementById("randomResult");if(!a.length){out.innerHTML='<div class="panel empty">Für diese Kriterien habe ich kein passendes Spiel gefunden. Versuch es mit etwas weniger Filtern.</div>';return}let g=a[Math.floor(Math.random()*a.length)];out.innerHTML=`<div class="panel result"><div class="bigcover">${g.name}</div><h2>${g.name}</h2><p class="muted">👥 ${g.players} · ⏱️ ca. ${g.time} min · ⭐ ${g.rating}/5 · 🏷️ ${g.cat}</p><button class="btn full" onclick="played(${g.id})">▶ Dieses Spiel spielen!</button><button class="btn secondary full" onclick="pickRandom()">↻ Noch einmal</button></div>`}
 function addGame(){let name=document.getElementById("fName").value.trim();if(!name){alert("Bitte einen Namen eingeben.");return}games.push({id:Date.now(),name,players:document.getElementById("fPlayers").value||"2–4",time:+document.getElementById("fTime").value||60,cat:document.getElementById("fCat").value.trim()||"Sonstiges",diff:document.getElementById("fDiff").value,rating:+document.getElementById("fRating").value,plays:0,fav:false,last:""});save();["fName","fPlayers","fTime","fCat"].forEach(x=>document.getElementById(x).value="");show("library");}
 function renderStats(){let total=games.reduce((a,g)=>a+g.plays,0),hours=Math.round(games.reduce((a,g)=>a+g.plays*g.time,0)/60);document.getElementById("statsGrid").innerHTML=`<div class="stat">🎲<b>${games.length}</b><span class="muted">Spiele insgesamt</span></div><div class="stat">⭐<b>${total}</b><span class="muted">Partien gespielt</span></div><div class="stat">⏱️<b>${hours} h</b><span class="muted">Spielzeit</span></div><div class="stat">🏷️<b>${new Set(games.map(g=>g.cat)).size}</b><span class="muted">Kategorien</span></div>`;document.getElementById("topGames").innerHTML=[...games].sort((a,b)=>b.plays-a.plays).slice(0,5).map((g,i)=>`<div class="row between" style="padding:9px 0;border-bottom:1px solid #eee"><span>${i+1}. ${g.name}</span><b>${g.plays}×</b></div>`).join("")}
