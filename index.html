@@ -36,7 +36,7 @@
 </head>
 <body>
 <div class="app">
-<header><div class="top"><span class="dice">🎲</span><button class="gear" onclick="show('settings')">⚙️</button></div><h1 id="title">Schön, dass du da bist!</h1><div class="sub" id="subtitle">Deine persönliche Brettspiel-Sammlung · Version 17</div></header>
+<header><div class="top"><span class="dice">🎲</span><button class="gear" onclick="show('settings')">⚙️</button></div><h1 id="title">Schön, dass du da bist!</h1><div class="sub" id="subtitle">Deine persönliche Brettspiel-Sammlung · Version 19</div></header>
 <main class="content">
 <section id="home">
   <div class="grid">
@@ -83,62 +83,84 @@ games.forEach(g=>{if(!Array.isArray(g.categories))g.categories=[g.cat];});
 function catsOf(g){return Array.isArray(g.categories)&&g.categories.length?g.categories:[g.cat];}
 function catText(g){return catsOf(g).join(" · ");}
 const COVER_MAP={
-"Dobble (Spot it! Games)":"assets/dobble.jpg",
+"Dobble":"assets/dobble.jpg",
 "Moggel Motte":"assets/moggel_motte.jpg",
+"Mogel Motte":"assets/moggel_motte.jpg",
 "Kakerlakensalat":"assets/kakerlakensalat.jpg",
 "Schummelhummel":"assets/schummelhummel.jpg",
 "Kakerlakenpoker":"assets/kakerlakenpoker.jpg",
 "Skullqueen":"assets/skullqueen.jpg",
-"Exploding Kittens – Originale Edition":"assets/exploding_kittens.jpg",
+"Exploding Kittens - originalle Edition":"assets/exploding_kittens.jpg",
+"Exploding Kittens – originale Edition":"assets/exploding_kittens.jpg",
 "Flip 7":"assets/flip7.jpg",
 "Druids":"assets/druids.jpg",
 "Wizard":"https://www.rossmann.dk/media-neu/122/MAM_12219482/MAM_12219482_SHOP_IMAGE_2.0.png?auto=webp&canvas=600%2C600&fit=bounds&format=webply&height=600&quality=80&width=600",
 "Shadow Cards":"assets/shadow_cards.jpg",
+"Skipbo":"assets/skipbo.jpg",
 "Skip-Bo":"assets/skipbo.jpg",
-"Skyjo":"assets/skyjo.jpg",
 "Phase 10":"assets/phase10.jpg",
 "UNO Flip":"assets/uno_flip.jpg",
 "Illusion":"assets/illusion.jpg",
 "Rummy":"assets/rummy.jpg",
+"Dos":"assets/dos.jpg",
 "DOS":"assets/dos.jpg",
 "Abluxxen":"assets/abluxxen.jpg",
 "Machi Koro":"assets/machi_koro.jpg",
 "Machi Koro – Großstadt Erweiterung":"assets/machi_koro_grossstadt.webp",
+"Machi Koro - Großstadt Erweiterung":"assets/machi_koro_grossstadt.webp",
 "Silencio":"assets/silencio.jpg",
+"Quixx":"assets/qwixx.jpg",
 "Qwixx":"assets/qwixx.jpg",
 "Pim Pam Pum":"assets/pim_pam_pum.jpg",
 "That's not a hat":"assets/thats_not_a_hat.jpg",
 "The Mind":"assets/the_mind.jpg",
+"Hitster - Guilty Pleasures":"assets/hitster_guilty_pleasures.jpg",
 "Hitster – Guilty Pleasures":"assets/hitster_guilty_pleasures.jpg",
 "Hitster":"assets/hitster.jpg",
+"Play - The Music Party Game":"assets/play.jpg",
 "Play – The Music Party Game":"assets/play.jpg",
 "Klugscheisser":"assets/klugscheisser.jpg",
 "Arschkarte":"assets/arschkarte.jpg",
+"Krime tours":"assets/crime_tours.jpg",
 "Krime Tours":"assets/crime_tours.jpg",
+"black stories - strange world edition":"assets/black_stories_strange_world.jpg",
 "black stories – Strange World Edition":"assets/black_stories_strange_world.jpg",
+"black stories - daily disasters edition":"assets/black_stories_daily_disasters.jpg",
 "black stories – Daily Disasters Edition":"assets/black_stories_daily_disasters.jpg",
+"Im Namen des Volkes - Fall 1: Die tödlichen Goldfische":"assets/im_namen_des_volkes.jpg",
 "Im Namen des Volkes – Fall 1: Die tödlichen Goldfische":"assets/im_namen_des_volkes.jpg",
+"Gemeinsame Sache":"assets/gemeinsame_sache.jpg",
 "Gemeinsame Sache (Partyfieber 4)":"assets/gemeinsame_sache.jpg",
+"If you were - a party game":"assets/if_you_were.jpg",
 "If You Were – A Party Game":"assets/if_you_were.jpg",
 "Magnetic":"assets/magnetic.jpg",
 "Humanity":"assets/humanity.jpg",
-"Deep Talk – Take It Serious":"assets/deep_talk.jpg",
+"deep talk":"assets/deep_talk.jpg",
+"Deep Talk":"assets/deep_talk.jpg",
 "Wahrheit oder Pflicht":"assets/wahrheit_oder_pflicht.jpg",
 "Risiko":"assets/risiko.jpg",
 "Flamecraft":"https://store.asmodee.com/cdn/shop/files/LKYFMCR01EN_535x.jpg?v=1690991871",
-"Here to Slay":"assets/here_to_slay.jpg",
-"Keltis":"assets/keltis.jpg",
 "Dorfromantik Sakura":"assets/dorfromantik_sakura.jpg",
-"Trivial Pursuit – Familienedition":"assets/trivial_pursuit_familienedition.jpg",
-"Munchkin – Basisspiel + Erweiterung":"assets/munchkin.jpg",
+"Munchkin - Basisspiel + Erweiterung":"assets/munchkin.jpg",
+"Catan - Das Duell":"assets/catan_das_duell.jpg",
 "Catan – Das Duell":"assets/catan_das_duell.jpg",
 "Animal Kingdoms":"assets/animal_kingdoms.jpg",
+"Dice Games - 4 in 1":"assets/dice_games.jpg",
 "Dice Games – 4 in 1":"assets/dice_games.jpg",
 "99 Games":"assets/99games.jpg",
 "Fiasco":"assets/fiasco.jpg",
 "Rummikub":"assets/rummikub_wort.jpg",
 "Würfel Ligretto":"assets/wuerfel_ligretto.jpg",
 "Kampf gegen die Korinthenkacker":"assets/korinthenkacker.jpg",
+"Dobble (Spot it! Games)":"assets/dobble.jpg",
+"Exploding Kittens – Originale Edition":"assets/exploding_kittens.jpg",
+"Skyjo":"assets/skyjo.jpg",
+"Deep Talk – Take It Serious":"assets/deep_talk.jpg",
+"Here to Slay":"assets/here_to_slay.jpg",
+"Keltis":"assets/keltis.jpg",
+"Trivial Pursuit – Familienedition":"assets/trivial_pursuit_familienedition.jpg",
+"Munchkin – Basisspiel + Erweiterung":"assets/munchkin.jpg",
+
 }
 games.forEach(g=>{if(COVER_MAP[g.name])g.cover=COVER_MAP[g.name];});
 function coverHTML(g,large=false){return g.cover?`<div class="${large?'detailcover':'cover'} coverimage"><img src="${g.cover}" alt="${esc(g.name)}">${!large?`<span class="fav">${g.fav?"♥":""}</span>`:""}</div>`:`<div class="${large?'detailcover':'cover'}">${g.name}${!large?`<span class="fav">${g.fav?"♥":""}</span>`:""}</div>`;}
@@ -170,13 +192,7 @@ function selectedCats(id){return [...document.querySelectorAll("#"+id+" .chip.ac
 function addGame(){let name=document.getElementById("fName").value.trim();if(!name){alert("Bitte einen Namen eingeben.");return}games.push({id:Date.now(),name,players:document.getElementById("fPlayers").value||"2–4",time:+document.getElementById("fTime").value||60,cat:selectedCats("fCats")[0]||"Sonstiges",categories:selectedCats("fCats").length?selectedCats("fCats"):["Sonstiges"],diff:document.getElementById("fDiff").value,rating:+document.getElementById("fRating").value,plays:0,fav:false,last:""});save();["fName","fPlayers","fTime"].forEach(x=>document.getElementById(x).value="");document.querySelectorAll("#fCats .chip").forEach(x=>x.classList.remove("active"));show("library");}
 function renderStats(){let total=games.reduce((a,g)=>a+g.plays,0),hours=Math.round(games.reduce((a,g)=>a+g.plays*g.time,0)/60);document.getElementById("statsGrid").innerHTML=`<div class="stat">🎲<b>${games.length}</b><span class="muted">Spiele insgesamt</span></div><div class="stat">⭐<b>${total}</b><span class="muted">Partien gespielt</span></div><div class="stat">⏱️<b>${hours} h</b><span class="muted">Spielzeit</span></div><div class="stat">🏷️<b>${new Set(games.map(g=>g.cat)).size}</b><span class="muted">Kategorien</span></div>`;document.getElementById("topGames").innerHTML=[...games].sort((a,b)=>b.plays-a.plays).slice(0,5).map((g,i)=>`<div class="row between" style="padding:9px 0;border-bottom:1px solid #eee"><span>${i+1}. ${g.name}</span><b>${g.plays}×</b></div>`).join("")}
 function exportData(){let blob=new Blob([JSON.stringify(games,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="meine-brettspiele.json";a.click();URL.revokeObjectURL(a.href)}
-function importData(){let i=document.createElement("input");i.type="file";i.accept=".json";i.onchange=()=>{let r=new FileReader();r.onload=()=>{try{games=JSON.parse(r.result);save();renderAll();alert("Sammlung importiert.");}catch(e){alert("Datei konnte nicht gelesen werden.")}}"Skyjo":"assets/skyjo.jpg",
-"Keltis":"assets/keltis.jpg",
-"Here to slay":"assets/here_to_slay.jpg",
-"Here to Slay":"assets/here_to_slay.jpg",
-"Trivial Pursuit - Familienedition":"assets/trivial_pursuit_familienedition.jpg",
-"Trivial Pursuit – Familienedition":"assets/trivial_pursuit_familienedition.jpg",
-}r.readAsText(i.files[0])};i.click()}
+function importData(){let i=document.createElement("input");i.type="file";i.accept=".json";i.onchange=()=>{let r=new FileReader();r.onload=()=>{try{games=JSON.parse(r.result);save();renderAll();alert("Sammlung importiert.");}catch(e){alert("Datei konnte nicht gelesen werden.")}};r.readAsText(i.files[0])};i.click()}
 function resetData(){if(confirm("Startsammlung wiederherstellen?")){games=seed;save();renderAll();}}
 
 function openDetails(id){
