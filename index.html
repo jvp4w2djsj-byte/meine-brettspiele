@@ -30,7 +30,9 @@
     .result{text-align:center}.result .bigcover{height:240px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:800;color:white;background:linear-gradient(135deg,#4f78a4,#253d5b);margin-bottom:15px}
     .statgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:white;border-radius:15px;padding:14px}.stat b{font-size:24px;display:block}.muted{color:var(--muted)}.empty{text-align:center;padding:30px;color:var(--muted)}
     @media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}.games{grid-template-columns:repeat(4,1fr)}}
-  </style>
+  
+.gameclick{cursor:pointer}.detailcover{height:220px;border-radius:20px;display:flex;align-items:center;justify-content:center;color:white;font-size:34px;font-weight:800;text-align:center;padding:20px;background:linear-gradient(135deg,#6b8f71,#274b38);margin-bottom:15px}.detailgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.detailitem{background:white;border-radius:14px;padding:12px}.detailitem b{display:block;font-size:12px;color:var(--muted);margin-bottom:3px}.starbtn{background:#fff1b8;border-radius:12px;padding:10px}.danger{background:#f4d9d5!important;color:#8d3026!important}
+</style>
 </head>
 <body>
 <div class="app">
@@ -66,6 +68,8 @@
 <div><label>Schwierigkeit</label><select id="fDiff" class="field"><option>leicht</option><option selected>mittel</option><option>schwer</option></select></div>
 <div><label>Bewertung</label><select id="fRating" class="field"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></div>
 </div><button class="btn full" onclick="addGame()">Spiel speichern</button></div></section>
+
+<section id="details" class="hidden"><div id="detailContent"></div></section>
 <section id="settings" class="hidden"><div class="panel"><h2>⚙️ Einstellungen</h2><p class="muted">Die Sammlung wird ausschließlich in diesem Browser auf deinem Gerät gespeichert.</p><button class="btn secondary full" onclick="exportData()">📤 Sammlung exportieren</button><button class="btn secondary full" onclick="importData()">📥 Sammlung importieren</button><button class="btn full" onclick="resetData()">Sammlung auf deine Startsammlung zurücksetzen</button></div></section>
 </main>
 <nav class="nav"><button onclick="show('home')" id="navhome" class="active"><b>⌂</b>Start</button><button onclick="show('library')" id="navlibrary"><b>▦</b>Spiele</button><button onclick="show('random')" id="navrandom"><b>⚒</b>Zufall</button><button onclick="show('stats')" id="navstats"><b>▥</b>Statistik</button></nav>
@@ -77,7 +81,7 @@ let cats=["Strategie","Familie","Party","Kartenspiel","Kooperativ","Duell","Für
 function save(){localStorage.setItem("myBoardGames",JSON.stringify(games));}
 function show(id){document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));let n=document.getElementById("nav"+id);if(n)n.classList.add("active");document.getElementById("title").textContent=id==="home"?"Schön, dass du da bist!":({library:"Meine Spiele",random:"Zufallsauswahl",favorites:"Favoriten",recent:"Zuletzt gespielt",stats:"Statistik",add:"Spiel hinzufügen",settings:"Einstellungen"}[id]||"Meine Spiele");renderAll();}
 function coverClass(i){return i%3===1?"":" c2"}
-function card(g,i){return `<article class="game"><div class="cover">${g.name}<span class="fav">${g.fav?"♥":""}</span></div><div class="gamebody"><strong>${g.name}</strong><div class="meta">👥 ${g.players} · ⏱️ ${g.time} min</div><div class="meta">⭐ ${g.rating}/5 · ${g.cat}</div><button class="btn secondary full" onclick="played(${g.id})">Als gespielt markieren</button></div></article>`}
+function card(g,i){return `<article class="game gameclick" onclick="openDetails(${g.id})"><div class="cover">${g.name}<span class="fav">${g.fav?"♥":""}</span></div><div class="gamebody"><strong>${g.name}</strong><div class="meta">👥 ${g.players} · ⏱️ ${g.time} min</div><div class="meta">⭐ ${g.rating}/5 · ${g.cat}</div><button class="btn secondary full" onclick="event.stopPropagation();played(${g.id})">Als gespielt markieren</button></div></article>`}
 function renderLibrary(){let q=(document.getElementById("search")?.value||"").toLowerCase();let active=document.querySelector("#chips .active")?.dataset.cat||"";let arr=games.filter(g=>(!q||g.name.toLowerCase().includes(q))&&(!active||g.cat===active));document.getElementById("gameGrid").innerHTML=arr.length?arr.map(card).join(""):`<div class="empty">Keine Spiele gefunden.</div>`}
 function renderChips(){let all=[...new Set(games.map(g=>g.cat))];document.getElementById("chips").innerHTML=`<button class="chip active" data-cat="" onclick="chip(this)">Alle</button>`+all.map(c=>`<button class="chip" data-cat="${c}" onclick="chip(this)">${c}</button>`).join("")}
 function chip(el){document.querySelectorAll("#chips .chip").forEach(x=>x.classList.remove("active"));el.classList.add("active");renderLibrary()}
@@ -90,6 +94,64 @@ function renderStats(){let total=games.reduce((a,g)=>a+g.plays,0),hours=Math.rou
 function exportData(){let blob=new Blob([JSON.stringify(games,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="meine-brettspiele.json";a.click();URL.revokeObjectURL(a.href)}
 function importData(){let i=document.createElement("input");i.type="file";i.accept=".json";i.onchange=()=>{let r=new FileReader();r.onload=()=>{try{games=JSON.parse(r.result);save();renderAll();alert("Sammlung importiert.");}catch(e){alert("Datei konnte nicht gelesen werden.")}};r.readAsText(i.files[0])};i.click()}
 function resetData(){if(confirm("Startsammlung wiederherstellen?")){games=seed;save();renderAll();}}
+
+function openDetails(id){
+  const g=games.find(x=>x.id===id); if(!g)return;
+  document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
+  document.getElementById("details").classList.remove("hidden");
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+  document.getElementById("title").textContent=g.name;
+  const stars="★".repeat(g.rating||0)+"☆".repeat(5-(g.rating||0));
+  document.getElementById("detailContent").innerHTML=`
+  <div class="panel">
+    <div class="detailcover">${g.name}</div>
+    <h2>${g.name} ${g.fav?"❤️":""}</h2>
+    <div class="detailgrid">
+      <div class="detailitem"><b>👥 Spieler</b>${g.players}</div>
+      <div class="detailitem"><b>⏱️ Dauer</b>${g.time} Minuten</div>
+      <div class="detailitem"><b>🏷️ Kategorie</b>${g.cat}</div>
+      <div class="detailitem"><b>🧠 Schwierigkeit</b>${g.diff}</div>
+      <div class="detailitem"><b>⭐ Bewertung</b>${stars}</div>
+      <div class="detailitem"><b>🎲 Gespielt</b>${g.plays}×</div>
+    </div>
+    <button class="btn full" onclick="played(${g.id});openDetails(${g.id})">▶ Als gespielt markieren</button>
+    <button class="btn secondary full" onclick="toggleFav(${g.id})">${g.fav?"💔 Aus Favoriten entfernen":"❤️ Zu Favoriten hinzufügen"}</button>
+    <button class="btn secondary full" onclick="editGame(${g.id})">✏️ Angaben bearbeiten</button>
+    <button class="btn danger full" onclick="deleteGame(${g.id})">🗑️ Spiel entfernen</button>
+  </div>`;
+}
+function toggleFav(id){let g=games.find(x=>x.id===id);g.fav=!g.fav;save();openDetails(id);renderAll();}
+function editGame(id){
+  const g=games.find(x=>x.id===id); if(!g)return;
+  document.getElementById("detailContent").innerHTML=`
+  <div class="panel"><h2>✏️ ${g.name}</h2>
+  <div class="formgrid">
+  <div><label>Name</label><input id="eName" class="field" value="${esc(g.name)}"></div>
+  <div><label>Spieler</label><input id="ePlayers" class="field" value="${esc(g.players)}"></div>
+  <div><label>Spieldauer (Min.)</label><input id="eTime" class="field" type="number" value="${g.time}"></div>
+  <div><label>Kategorie</label><input id="eCat" class="field" value="${esc(g.cat)}"></div>
+  <div><label>Schwierigkeit</label><select id="eDiff" class="field"><option ${g.diff==="leicht"?"selected":""}>leicht</option><option ${g.diff==="mittel"?"selected":""}>mittel</option><option ${g.diff==="schwer"?"selected":""}>schwer</option></select></div>
+  <div><label>Bewertung</label><select id="eRating" class="field">${[5,4,3,2,1,0].map(n=>`<option value="${n}" ${g.rating===n?"selected":""}>${n===0?"Noch nicht bewertet":n+" Sterne"}</option>`).join("")}</select></div>
+  </div>
+  <button class="btn full" onclick="saveEdit(${g.id})">💾 Speichern</button>
+  <button class="btn secondary full" onclick="openDetails(${g.id})">Abbrechen</button></div>`;
+}
+function esc(s){return String(s).replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
+function saveEdit(id){
+  const g=games.find(x=>x.id===id);
+  g.name=document.getElementById("eName").value.trim()||g.name;
+  g.players=document.getElementById("ePlayers").value.trim()||g.players;
+  g.time=+document.getElementById("eTime").value||g.time;
+  g.cat=document.getElementById("eCat").value.trim()||g.cat;
+  g.diff=document.getElementById("eDiff").value;
+  g.rating=+document.getElementById("eRating").value;
+  save();renderAll();openDetails(id);
+}
+function deleteGame(id){
+  const g=games.find(x=>x.id===id); if(!g)return;
+  if(confirm(`"${g.name}" wirklich aus deiner Sammlung entfernen?`)){games=games.filter(x=>x.id!==id);save();show("library");}
+}
+
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
 renderAll();
 </script>
