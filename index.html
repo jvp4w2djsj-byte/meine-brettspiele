@@ -324,7 +324,7 @@ function renderLibrary(){
     if(q&&!text.includes(q))return false;
     if(active&&!catsOf(g).includes(active))return false;
     if(art&&!catsOf(g).includes(art))return false;
-    if(time&&g.time>time)return false;
+    if(time&&g.time<time)return false;
     if(players&&!supportsPlayer(g,players))return false;
     if(special==="fav"&&!g.fav)return false;
     if(special==="rare"&&g.plays>1)return false;
