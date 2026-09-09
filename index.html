@@ -32,6 +32,8 @@
     .statgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:white;border-radius:15px;padding:14px}.stat b{font-size:24px;display:block}.muted{color:var(--muted)}.empty{text-align:center;padding:30px;color:var(--muted)}
     @media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}.games{grid-template-columns:repeat(4,1fr)}}
   
+
+.detailrating{display:flex;align-items:center;gap:2px;flex-wrap:wrap}.detailstar{border:0;background:transparent;color:#d6d6d6;font-size:24px;padding:0 2px;cursor:pointer;line-height:1}.detailstar.active{color:#f2bd22}.ratingvalue{font-size:12px;color:var(--muted);margin-left:6px}.categoryeditrow{display:flex;gap:8px;align-items:center}.categoryeditrow .field{flex:1}.categoryaddbtn{white-space:nowrap;margin:0!important;padding:9px 10px!important;font-size:12px!important}.selectedcats{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.selectedcat{display:inline-flex;align-items:center;gap:5px;background:#eef3ee;color:var(--green);border:1px solid #c8d8cb;border-radius:999px;padding:6px 9px;font-size:12px}.selectedcat button{border:0;background:transparent;color:inherit;cursor:pointer;font-size:16px;line-height:1;padding:0}@media(max-width:600px){.categoryeditrow{flex-wrap:wrap}.categoryeditrow .field{min-width:100%}.categoryaddbtn{flex:1}}
 .gameclick{cursor:pointer}.detailcover{height:220px;border-radius:20px;display:flex;align-items:center;justify-content:center;color:white;font-size:34px;font-weight:800;text-align:center;padding:20px;background:linear-gradient(135deg,#6b8f71,#274b38);margin-bottom:15px}.detailgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.detailitem{background:white;border-radius:14px;padding:12px}.detailitem b{display:block;font-size:12px;color:var(--muted);margin-bottom:3px}.starbtn{background:#fff1b8;border-radius:12px;padding:10px}.danger{background:#f4d9d5!important;color:#8d3026!important}
 .game button{position:relative;z-index:2}.game .btn{display:block}.\n.chips{scrollbar-width:none}.chips::-webkit-scrollbar{display:none}.detailcover{box-shadow:inset 0 0 0 1px #ffffff18}.gamebody .meta{line-height:1.45}.coverimage{padding:0!important;overflow:hidden}.coverimage img{width:100%;height:100%;object-fit:cover;display:block}.coverwrap{height:150px}.coverwrap .cover{height:150px}.detailcover.coverimage{height:220px}.detailcover.coverimage img{object-fit:contain;background:#eee}.coverimage .fav{position:absolute;right:8px;top:8px}.cover{position:relative}
 /* V19 Startseite – rein visuelles Update */
@@ -233,6 +235,19 @@ const seed=[{"id":1,"name":"Dobble (Spot it! Games)","players":"2–8","time":15
 let games=JSON.parse(localStorage.getItem("myBoardGames")||"null")||seed;
 let cats=["Strategie","Familie","Party","Kartenspiel","Kooperativ","Duell","Für 2 Spieler","Schnell"];
 const CATEGORY_OPTIONS=["Kartenspiel","Würfelspiel","Strategie","Party","Familie","Kooperativ","Duell","Musik","Quiz","Krimi","Gespräch","Rollenspiel","Schnell","Für 2 Spieler"];
+let customCategories=JSON.parse(localStorage.getItem("myBoardGameCategories")||"[]");
+function categoryOptions(){return [...new Set([...CATEGORY_OPTIONS,...customCategories,...games.flatMap(g=>catsOf(g))])].filter(Boolean).sort((a,b)=>a.localeCompare(b,"de"));}
+function saveCategories(){localStorage.setItem("myBoardGameCategories",JSON.stringify(customCategories));}
+function createCustomCategory(selectId, selectedContainerId){
+  const name=prompt("Name der neuen Kategorie:");
+  if(!name)return;
+  const cat=name.trim();
+  if(!cat)return;
+  if(!categoryOptions().includes(cat)){customCategories.push(cat);saveCategories();}
+  const sel=document.getElementById(selectId);
+  if(sel){sel.innerHTML=categoryOptions().map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");sel.value=cat;}
+  if(selectedContainerId) addSelectedEditCategory(cat,selectedContainerId);
+}
 games.forEach(g=>{if(!Array.isArray(g.categories))g.categories=[g.cat];});
 function catsOf(g){return Array.isArray(g.categories)&&g.categories.length?g.categories:[g.cat];}
 function catText(g){return catsOf(g).join(" · ");}
@@ -480,7 +495,7 @@ function openDetails(id){
       <div class="detailitem"><b>⏱️ Dauer</b>${g.time} Minuten</div>
       <div class="detailitem"><b>🏷️ Kategorien</b>${esc(catText(g))}</div>
       <div class="detailitem"><b>🧠 Schwierigkeit</b>${esc(g.diff)}</div>
-      <div class="detailitem"><b>⭐ Bewertung</b>${stars}</div>
+      <div class="detailitem"><b>⭐ Bewertung</b><div class="detailrating">${[1,2,3,4,5].map(n=>`<button class="detailstar ${g.rating>=n?"active":""}" onclick="setDetailRating(${g.id},${n})" aria-label="${n} Sterne">★</button>`).join("")}<span class="ratingvalue">${g.rating?g.rating+"/5":"noch nicht bewertet"}</span></div></div>
       <div class="detailitem"><b>🎲 Gespielt</b>${g.plays}×</div>
     </div>
     <div class="lastplayed">🕐 Zuletzt gespielt: <b>${last}</b></div>
@@ -493,6 +508,11 @@ function openDetails(id){
   </div>`;
 }
 function toggleFav(id){let g=games.find(x=>x.id===id);g.fav=!g.fav;save();openDetails(id);renderAll();}
+function setDetailRating(id,n){const g=games.find(x=>x.id===id);if(!g)return;g.rating=n;save();openDetails(id);renderAll();}
+function addSelectedEditCategoryFromSelect(){const sel=document.getElementById("eCategory");if(sel)addSelectedEditCategory(sel.value,"eSelectedCats");}
+function addSelectedEditCategory(cat,containerId){const el=document.getElementById(containerId);if(!el||!cat)return;const existing=[...el.querySelectorAll(".selectedcat")].map(x=>x.dataset.cat);if(existing.includes(cat))return;el.insertAdjacentHTML("beforeend",`<span class="selectedcat" data-cat="${esc(cat)}">${esc(cat)} <button type="button" onclick="removeSelectedEditCategory(${JSON.stringify(cat)})">×</button></span>`);}
+function removeSelectedEditCategory(cat){const el=document.querySelector(`#eSelectedCats .selectedcat[data-cat="${CSS.escape(cat)}"]`);if(el)el.remove();}
+function selectedEditCategories(){return [...document.querySelectorAll("#eSelectedCats .selectedcat")].map(x=>x.dataset.cat);}
 function editGame(id){
   const g=games.find(x=>x.id===id); if(!g)return;
   document.getElementById("detailContent").innerHTML=`
@@ -501,7 +521,7 @@ function editGame(id){
   <div><label>Name</label><input id="eName" class="field" value="${esc(g.name)}"></div>
   <div><label>Spieler</label><input id="ePlayers" class="field" value="${esc(g.players)}"></div>
   <div><label>Spieldauer (Min.)</label><input id="eTime" class="field" type="number" value="${g.time}"></div>
-  <div><label>Kategorien</label><div id="eCats" class="chips">${CATEGORY_OPTIONS.map(c=>`<button type="button" class="chip ${catsOf(g).includes(c)?"active":""}" data-cat="${c}" onclick="this.classList.toggle('active')">${c}</button>`).join("")}</div></div>
+  <div style="grid-column:1/-1"><label>Kategorie</label><div class="categoryeditrow"><select id="eCategory" class="field">${categoryOptions().map(c=>`<option value="${esc(c)}" ${catsOf(g).includes(catsOf(g)[0])&&c===catsOf(g)[0]?"selected":""}>${esc(c)}</option>`).join("")}</select><button type="button" class="btn secondary categoryaddbtn" onclick="addSelectedEditCategoryFromSelect()">＋ Hinzufügen</button><button type="button" class="btn secondary categoryaddbtn" onclick="createCustomCategory('eCategory','eSelectedCats')">＋ Eigene Kategorie</button></div><div id="eSelectedCats" class="selectedcats">${catsOf(g).map(c=>`<span class="selectedcat">${esc(c)} <button type="button" onclick="removeSelectedEditCategory(${JSON.stringify(c)})">×</button></span>`).join("")}</div></div>
   <div><label>Schwierigkeit</label><select id="eDiff" class="field"><option ${g.diff==="leicht"?"selected":""}>leicht</option><option ${g.diff==="mittel"?"selected":""}>mittel</option><option ${g.diff==="schwer"?"selected":""}>schwer</option></select></div>
   <div><label>Bewertung</label><select id="eRating" class="field">${[5,4,3,2,1,0].map(n=>`<option value="${n}" ${g.rating===n?"selected":""}>${n===0?"Noch nicht bewertet":n+" Sterne"}</option>`).join("")}</select></div>
   <div style="grid-column:1/-1"><label>📖 Spielhilfe / eigene Notizen</label><textarea id="eNotes" class="field" rows="5" placeholder="Regel-Merksätze, eigene Hausregeln, Tipps …">${esc(g.notes||"")}</textarea></div>
@@ -520,7 +540,7 @@ function saveEdit(id){
   g.name=document.getElementById("eName").value.trim()||g.name;
   g.players=document.getElementById("ePlayers").value.trim()||g.players;
   g.time=+document.getElementById("eTime").value||g.time;
-  const chosen=selectedCats("eCats"); g.categories=chosen.length?chosen:(g.categories||[g.cat||"Sonstiges"]); g.cat=g.categories[0]||g.cat;
+  const chosen=selectedEditCategories(); g.categories=chosen.length?chosen:[g.cat||"Sonstiges"]; g.cat=g.categories[0]||g.cat;
   g.diff=document.getElementById("eDiff").value;
   g.rating=+document.getElementById("eRating").value;
   g.notes=document.getElementById("eNotes").value.trim();
