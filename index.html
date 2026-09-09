@@ -374,8 +374,8 @@ function renderHomeRanking(){
   arr=arr.slice(0,3);
   if(!arr.length){el.innerHTML='<div class="empty">Noch keine Daten für diese Rangliste vorhanden.</div>';return}
   const order=[1,0,2].filter(i=>arr[i]);
-  const medals=["🥈","🥇","🥉"], cls=["second","first","third"];
-  el.innerHTML=`<div class="podium">${order.map(i=>{const g=arr[i];const cover=g.cover?`<div class="podiumCover"><img src="${g.cover}" alt=""></div>`:`<div class="podiumCover">${esc(g.name)}</div>`;const meta=mode==="rating"?`⭐ ${g.rating}/5`:mode==="last"?`🕐 ${g.last?new Date(g.last+"T12:00:00").toLocaleDateString("de-AT"):"–"}`:`🎲 ${g.plays||0}×`;const stars=[1,2,3,4,5].map(n=>`<button class="${g.rating>=n?"active":""}" onclick="rateQuick(${g.id},${n})" title="${n} Sterne">★</button>`).join("");return `<div class="podiumPlace ${cls[i]}"><div class="podiumCrown">${i===0?"👑":medals[i]}</div>${cover}<div class="podiumName">${esc(g.name)}</div><div class="podiumMeta">${meta}</div><div class="quickstars" aria-label="${esc(g.name)} bewerten">${stars}</div><div class="podiumBlock"><span class="podiumMedal">${medals[i]}</span>${i+1}</div></div>`}).join("")}</div>`;
+  const medals=["🥈","🥇","🥉"];
+  el.innerHTML=`<div class="podium">${order.map(i=>{const g=arr[i];const cover=g.cover?`<div class="podiumCover"><img src="${g.cover}" alt=""></div>`:`<div class="podiumCover">${esc(g.name)}</div>`;const meta=mode==="rating"?`⭐ ${g.rating}/5`:mode==="last"?`🕐 ${g.last?new Date(g.last+"T12:00:00").toLocaleDateString("de-AT"):"–"}`:`🎲 ${g.plays||0}×`;const stars=[1,2,3,4,5].map(n=>`<button class="${g.rating>=n?"active":""}" onclick="rateQuick(${g.id},${n})" title="${n} Sterne">★</button>`).join("");return `<div class="podiumPlace ${({0:"first",1:"second",2:"third"})[i]}"><div class="podiumCrown">${i===0?"👑":medals[i]}</div>${cover}<div class="podiumName">${esc(g.name)}</div><div class="podiumMeta">${meta}</div><div class="quickstars" aria-label="${esc(g.name)} bewerten">${stars}</div><div class="podiumBlock"><span class="podiumMedal">${medals[i]}</span>${i+1}</div></div>`}).join("")}</div>`;
 }
 function renderAll(){
   renderHomeRanking();
