@@ -248,8 +248,8 @@ function createCustomCategory(selectId, selectedContainerId){
   if(sel){sel.innerHTML=categoryOptions().map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");sel.value=cat;}
   if(selectedContainerId) addSelectedEditCategory(cat,selectedContainerId);
 }
-games.forEach(g=>{if(!Array.isArray(g.categories))g.categories=[g.cat];});
-function catsOf(g){return Array.isArray(g.categories)&&g.categories.length?g.categories:[g.cat];}
+games.forEach(g=>{if(!Array.isArray(g.categories))g.categories=[g.cat];g.categories=[...new Set(g.categories.map(c=>String(c||"").trim()).filter(c=>c&&c!=="×"))];if(!g.categories.length&&g.cat&&g.cat!=="×")g.categories=[g.cat];g.cat=g.categories[0]||"Sonstiges";});
+function catsOf(g){const raw=Array.isArray(g.categories)&&g.categories.length?g.categories:[g.cat];return [...new Set(raw.map(c=>String(c||"").trim()).filter(c=>c&&c!=="×"))];}
 function catText(g){return catsOf(g).join(" · ");}
 const COVER_MAP={
 "Dobble":"assets/dobble.jpg",
@@ -511,7 +511,7 @@ function toggleFav(id){let g=games.find(x=>x.id===id);g.fav=!g.fav;save();openDe
 function setDetailRating(id,n){const g=games.find(x=>x.id===id);if(!g)return;g.rating=n;save();openDetails(id);renderAll();}
 function addSelectedEditCategoryFromSelect(){const sel=document.getElementById("eCategory");if(sel)addSelectedEditCategory(sel.value,"eSelectedCats");}
 function addSelectedEditCategory(cat,containerId){const el=document.getElementById(containerId);if(!el||!cat)return;const existing=[...el.querySelectorAll(".selectedcat")].map(x=>x.dataset.cat);if(existing.includes(cat))return;el.insertAdjacentHTML("beforeend",`<span class="selectedcat" data-cat="${esc(cat)}">${esc(cat)} <button type="button" onclick="removeSelectedEditCategory(${JSON.stringify(cat)})">×</button></span>`);}
-function removeSelectedEditCategory(cat){const el=document.querySelector(`#eSelectedCats .selectedcat[data-cat="${CSS.escape(cat)}"]`);if(el)el.remove();}
+function removeSelectedEditCategory(cat){const container=document.getElementById("eSelectedCats");if(!container)return;const chip=[...container.querySelectorAll(".selectedcat")].find(x=>x.dataset.cat===cat);if(chip)chip.remove();}
 function selectedEditCategories(){return [...document.querySelectorAll("#eSelectedCats .selectedcat")].map(x=>x.dataset.cat);}
 function editGame(id){
   const g=games.find(x=>x.id===id); if(!g)return;
