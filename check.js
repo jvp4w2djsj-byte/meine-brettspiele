@@ -90,7 +90,7 @@ games.forEach(g=>{if(COVER_MAP[g.name])g.cover=COVER_MAP[g.name];});
 function coverHTML(g,large=false){return g.cover?`<div class="${large?'detailcover':'cover'} coverimage"><img src="${g.cover}" alt="${esc(g.name)}">${!large?`<span class="fav">${g.fav?"♥":""}</span>`:""}</div>`:`<div class="${large?'detailcover':'cover'}">${g.name}${!large?`<span class="fav">${g.fav?"♥":""}</span>`:""}</div>`;}
 
 function save(){localStorage.setItem("myBoardGames",JSON.stringify(games));}
-function show(id){document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));let n=document.getElementById("nav"+id);if(n)n.classList.add("active");document.getElementById("title").textContent=id==="home"?"Schön, dass du da bist!":({library:"Meine Spiele",random:"Zufallsauswahl",favorites:"Favoriten",recent:"Zuletzt gespielt",stats:"Statistik",add:"Spiel hinzufügen",settings:"Einstellungen"}[id]||"Meine Spiele");renderAll();}
+function show(id){document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));let n=document.getElementById("nav"+id);if(n)n.classList.add("active");document.getElementById("title").textContent=id==="home"?"Schön, dass du da bist!":({library:"Meine Spiele",random:"Zufallsauswahl",favorites:"Favoriten",recent:"Zuletzt gespielt",stats:"Statistik",add:"Spiel hinzufügen",settings:"Einstellungen",friends:"Freunde"}[id]||"Meine Spiele");renderAll();}
 function coverClass(i){return i%3===1?"":" c2"}
 function card(g,i){return `<article class="game"><div class="coverwrap">${coverHTML(g)}</div><div class="gamebody"><strong>${g.name}</strong><div class="meta">👥 ${g.players} · ⏱️ ${g.time} min</div><div class="meta">⭐ ${g.rating?g.rating+"/5":"noch nicht bewertet"} · ${catText(g)}</div><div class="gameactions"><button class="btn detailsbtn" onclick="openDetails(${g.id})">Details →</button><button class="btn playedicon" onclick="played(${g.id})" aria-label="Als gespielt markieren" title="Als gespielt markieren">🎲</button></div></div></article>`}
 function playerRange(g){
@@ -158,7 +158,9 @@ function renderHomeRanking(){
   if(mode==="last") arr=arr.filter(g=>g.last).sort((a,b)=>(b.last||"").localeCompare(a.last||""));
   arr=arr.slice(0,3);
   if(!arr.length){el.innerHTML='<div class="empty">Noch keine Daten für diese Rangliste vorhanden.</div>';return}
-  el.innerHTML=arr.map((g,i)=>{const cover=g.cover?`<div class="rankcover"><img src="${g.cover}" alt=""></div>`:`<div class="rankcover">${esc(g.name)}</div>`;const meta=mode==="rating"?`⭐ ${g.rating}/5 · ${g.plays||0}× gespielt`:mode==="last"?`🕐 ${g.last?new Date(g.last+"T12:00:00").toLocaleDateString("de-AT"):"–"}`:`🎲 ${g.plays||0}× gespielt`;return `<div class="rankrow"><div class="ranknum">${i+1}</div>${cover}<div><div class="rankname">${esc(g.name)}</div><div class="rankmeta">${meta}</div></div><div class="quickstars" aria-label="${esc(g.name)} bewerten">${[1,2,3,4,5].map(n=>`<button class="${g.rating>=n?"active":""}" onclick="rateQuick(${g.id},${n})" title="${n} Sterne">★</button>`).join("")}</div></div>`}).join("");
+  const order=[1,0,2].filter(i=>arr[i]);
+  const medals=["🥈","🥇","🥉"];
+  el.innerHTML=`<div class="podium">${order.map(i=>{const g=arr[i];const cover=g.cover?`<div class="podiumCover"><img src="${g.cover}" alt=""></div>`:`<div class="podiumCover">${esc(g.name)}</div>`;const meta=mode==="rating"?`⭐ ${g.rating}/5`:mode==="last"?`🕐 ${g.last?new Date(g.last+"T12:00:00").toLocaleDateString("de-AT"):"–"}`:`🎲 ${g.plays||0}×`;const stars=[1,2,3,4,5].map(n=>`<button class="${g.rating>=n?"active":""}" onclick="rateQuick(${g.id},${n})" title="${n} Sterne">★</button>`).join("");return `<div class="podiumPlace ${({0:"first",1:"second",2:"third"})[i]}"><div class="podiumCrown">${i===0?"👑":medals[i]}</div>${cover}<div class="podiumName">${esc(g.name)}</div><div class="podiumMeta">${meta}</div><div class="quickstars" aria-label="${esc(g.name)} bewerten">${stars}</div><div class="podiumBlock"><span class="podiumMedal">${medals[i]}</span>${i+1}</div></div>`}).join("")}</div>`;
 }
 function renderAll(){
   renderHomeRanking();
@@ -209,6 +211,28 @@ function exportData(){let blob=new Blob([JSON.stringify(games,null,2)],{type:"ap
 function importData(){let i=document.createElement("input");i.type="file";i.accept=".json";i.onchange=()=>{let r=new FileReader();r.onload=()=>{try{games=JSON.parse(r.result);save();renderAll();alert("Sammlung importiert.");}catch(e){alert("Datei konnte nicht gelesen werden.")}};r.readAsText(i.files[0])};i.click()}
 function resetData(){if(confirm("Startsammlung wiederherstellen?")){games=seed;save();renderAll();}}
 
+function addFriend(){const name=document.getElementById("friendName").value.trim();if(!name){alert("Bitte einen Namen eingeben.");return}friends.push({id:Date.now(),name,group:document.getElementById("friendGroup").value.trim(),games:{}});saveFriends();document.getElementById("friendName").value="";document.getElementById("friendGroup").value="";renderFriends();}
+function removeFriend(id){if(!confirm("Freund wirklich entfernen?"))return;friends=friends.filter(f=>f.id!==id);saveFriends();renderFriends();renderAll();}
+function friendPlayed(gameId,friendId){const g=games.find(x=>x.id===gameId),f=friends.find(x=>x.id===friendId);if(!g||!f)return;g.plays=(g.plays||0)+1;g.last=new Date().toISOString().slice(0,10);f.games=f.games||{};f.games[gameId]=(f.games[gameId]||0)+1;save();saveFriends();openDetails(gameId);renderAll();}
+function renderFriends(){
+  const el=document.getElementById("friendsList");
+  if(!el)return;
+  if(!friends.length){el.innerHTML='<div class="panel empty">Noch keine Freunde angelegt. Füge oben deine ersten Spielepartner hinzu.</div>';return;}
+  el.innerHTML=friends.map(f=>{
+    const entries=Object.entries(f.games||{})
+      .map(([id,n])=>({g:games.find(x=>x.id==id),n:Number(n)}))
+      .filter(x=>x.g)
+      .sort((a,b)=>b.n-a.n);
+    const total=entries.reduce((a,x)=>a+x.n,0);
+    const best=entries[0]?.g?.name||"–";
+    const chips=entries.length
+      ? `<div class="friendchips">${entries.slice(0,5).map(x=>`<span class="friendchip active">${esc(x.g.name)} · ${x.n}×</span>`).join("")}</div>`
+      : '<div class="small muted" style="margin-top:9px">Noch kein gemeinsames Spiel erfasst.</div>';
+    return `<div class="friendcard"><div class="friendhead"><div><div class="friendname">${esc(f.name)}</div>${f.group?`<div class="friendgroup">👥 ${esc(f.group)}</div>`:""}</div><button class="btn danger" style="margin:0;padding:7px 10px;font-size:11px" onclick="removeFriend(${f.id})">Entfernen</button></div><div class="friendstats"><span>🎲 ${total} gemeinsame Partien</span><span>🏆 meist: ${esc(best)}</span></div>${chips}</div>`;
+  }).join("");
+}
+function renderAllFriends(){renderFriends();}
+
 function openDetails(id){
   const g=games.find(x=>x.id===id); if(!g)return;
   document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
@@ -231,6 +255,7 @@ function openDetails(id){
     </div>
     <div class="lastplayed">🕐 Zuletzt gespielt: <b>${last}</b></div>
     ${g.notes?`<div class="detailnote"><b>📖 Spielhilfe / eigene Notizen</b><br>${esc(g.notes)}</div>`:`<div class="detailnote muted">📖 Noch keine Spielhilfe oder Notizen hinterlegt.</div>`}
+    ${friends.length?`<div class="friendplay"><h3>👥 Mit Freund / Gruppe gespielt</h3><div class="friendplayrow">${friends.map(f=>`<button class="btn secondary" onclick="friendPlayed(${g.id},${f.id})">🎲 ${esc(f.name)}</button>`).join("")}</div></div>`:""}
     <button class="btn full playedmini" onclick="played(${g.id});openDetails(${g.id})">🎲 Gespielt</button>
     <button class="btn secondary full" onclick="toggleFav(${g.id})">${g.fav?"💔 Aus Favoriten entfernen":"❤️ Zu Favoriten hinzufügen"}</button>
     <button class="btn secondary full" onclick="editGame(${g.id})">✏️ Spiel bearbeiten</button>
