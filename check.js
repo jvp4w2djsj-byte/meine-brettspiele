@@ -92,7 +92,7 @@ function coverHTML(g,large=false){return g.cover?`<div class="${large?'detailcov
 function save(){localStorage.setItem("myBoardGames",JSON.stringify(games));}
 function show(id){document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));let n=document.getElementById("nav"+id);if(n)n.classList.add("active");document.getElementById("title").textContent=id==="home"?"Schön, dass du da bist!":({library:"Meine Spiele",random:"Zufallsauswahl",favorites:"Favoriten",recent:"Zuletzt gespielt",stats:"Statistik",add:"Spiel hinzufügen",settings:"Einstellungen"}[id]||"Meine Spiele");renderAll();}
 function coverClass(i){return i%3===1?"":" c2"}
-function card(g,i){return `<article class="game"><div class="coverwrap">${coverHTML(g)}</div><div class="gamebody"><strong>${g.name}</strong><div class="meta">👥 ${g.players} · ⏱️ ${g.time} min</div><div class="meta">⭐ ${g.rating?g.rating+"/5":"noch nicht bewertet"} · ${catText(g)}</div><button class="btn full" onclick="openDetails(${g.id})">Details →</button><button class="btn secondary full" onclick="played(${g.id})">Als gespielt markieren</button></div></article>`}
+function card(g,i){return `<article class="game"><div class="coverwrap">${coverHTML(g)}</div><div class="gamebody"><strong>${g.name}</strong><div class="meta">👥 ${g.players} · ⏱️ ${g.time} min</div><div class="meta">⭐ ${g.rating?g.rating+"/5":"noch nicht bewertet"} · ${catText(g)}</div><div class="gameactions"><button class="btn detailsbtn" onclick="openDetails(${g.id})">Details →</button><button class="btn playedicon" onclick="played(${g.id})" aria-label="Als gespielt markieren" title="Als gespielt markieren">🎲</button></div></div></article>`}
 function playerRange(g){
   const nums=(String(g.players).match(/\d+/g)||[]).map(Number);
   if(!nums.length)return [0,99];
@@ -148,7 +148,20 @@ function renderLibrary(){
 function renderChips(){let all=[...new Set(games.flatMap(g=>catsOf(g)))];document.getElementById("chips").innerHTML=`<button class="chip active" data-cat="" onclick="chip(this)">Alle</button>`+all.map(c=>`<button class="chip" data-cat="${c}" onclick="chip(this)">${c}</button>`).join("")}
 function chip(el){document.querySelectorAll("#chips .chip").forEach(x=>x.classList.remove("active"));el.classList.add("active");renderLibrary()}
 function renderGrid(id,arr){document.getElementById(id).innerHTML=arr.length?arr.map(card).join(""):`<div class="empty">Noch nichts vorhanden.</div>`}
+function rateQuick(id,n){const g=games.find(x=>x.id===id);if(!g)return;g.rating=n;save();renderAll();}
+function renderHomeRanking(){
+  const el=document.getElementById("homeTop3"); if(!el)return;
+  const mode=document.getElementById("homeRankMode")?.value||"plays";
+  let arr=[...games];
+  if(mode==="plays") arr.sort((a,b)=>(b.plays||0)-(a.plays||0)||a.name.localeCompare(b.name));
+  if(mode==="rating") arr=arr.filter(g=>g.rating>0).sort((a,b)=>(b.rating||0)-(a.rating||0)||(b.plays||0)-(a.plays||0)||a.name.localeCompare(b.name));
+  if(mode==="last") arr=arr.filter(g=>g.last).sort((a,b)=>(b.last||"").localeCompare(a.last||""));
+  arr=arr.slice(0,3);
+  if(!arr.length){el.innerHTML='<div class="empty">Noch keine Daten für diese Rangliste vorhanden.</div>';return}
+  el.innerHTML=arr.map((g,i)=>{const cover=g.cover?`<div class="rankcover"><img src="${g.cover}" alt=""></div>`:`<div class="rankcover">${esc(g.name)}</div>`;const meta=mode==="rating"?`⭐ ${g.rating}/5 · ${g.plays||0}× gespielt`:mode==="last"?`🕐 ${g.last?new Date(g.last+"T12:00:00").toLocaleDateString("de-AT"):"–"}`:`🎲 ${g.plays||0}× gespielt`;return `<div class="rankrow"><div class="ranknum">${i+1}</div>${cover}<div><div class="rankname">${esc(g.name)}</div><div class="rankmeta">${meta}</div></div><div class="quickstars" aria-label="${esc(g.name)} bewerten">${[1,2,3,4,5].map(n=>`<button class="${g.rating>=n?"active":""}" onclick="rateQuick(${g.id},${n})" title="${n} Sterne">★</button>`).join("")}</div></div>`}).join("");
+}
 function renderAll(){
+  renderHomeRanking();
   renderChips();
   renderLibrary();
   renderGrid("favGrid",games.filter(g=>g.fav));
