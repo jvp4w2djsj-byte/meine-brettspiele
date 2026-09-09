@@ -85,6 +85,12 @@ header h1{
 .btn{
   box-shadow:0 4px 10px rgba(36,76,58,.12);
 }
+
+.playedmini{font-size:11px!important;padding:6px 8px!important;border-radius:9px!important;opacity:.82}
+
+.filtergrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.filtergrid select{width:100%;padding:11px;border:1px solid var(--line);border-radius:12px;background:white}
+#libraryCount{font-weight:600}
 </style>
 </head>
 <body>
@@ -102,8 +108,71 @@ header h1{
   </div>
 </section>
 
-<section id="library" class="hidden"><div class="panel"><input id="search" class="search" placeholder="🔎 Spiele suchen …" oninput="renderLibrary()"><div class="chips" id="chips"></div></div><div id="gameGrid" class="games"></div></section>
-<section id="random" class="hidden"><div class="panel filters"><h2>🎲 Was möchtest du spielen?</h2><p class="muted">Setze ein paar Kriterien – oder lass dich komplett überraschen.</p><div class="formgrid">
+<section id="library" class="hidden">
+<div class="panel">
+  <input id="search" class="search" placeholder="🔎 Spiele suchen …" oninput="renderLibrary()">
+
+  <div class="sectiontitle" style="margin-top:14px;margin-bottom:5px">
+    <div><h3>Filter</h3><div class="small muted">Kombiniere mehrere Kriterien</div></div>
+    <button class="btn secondary" style="padding:8px 10px;font-size:12px" onclick="clearLibraryFilters()">Zurücksetzen</button>
+  </div>
+
+  <div class="filtergrid">
+    <div>
+      <label class="fieldlabel">🏷️ Art</label>
+      <select id="filterArt" onchange="renderLibrary()"></select>
+    </div>
+    <div>
+      <label class="fieldlabel">⏱️ Dauer</label>
+      <select id="filterTime" onchange="renderLibrary()">
+        <option value="">Alle</option>
+        <option value="15">bis 15 Min.</option>
+        <option value="30">bis 30 Min.</option>
+        <option value="45">bis 45 Min.</option>
+        <option value="60">bis 60 Min.</option>
+        <option value="90">bis 90 Min.</option>
+        <option value="120">bis 120 Min.</option>
+      </select>
+    </div>
+    <div>
+      <label class="fieldlabel">👥 Spieler</label>
+      <select id="filterPlayers" onchange="renderLibrary()">
+        <option value="">Alle</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5+</option>
+      </select>
+    </div>
+    <div>
+      <label class="fieldlabel">⭐ Status</label>
+      <select id="filterSpecial" onchange="renderLibrary()">
+        <option value="">Alle Spiele</option>
+        <option value="fav">❤️ Favoriten</option>
+        <option value="rare">🕐 Selten gespielt</option>
+        <option value="new">✨ Neu hinzugefügt</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="chips" id="chips" style="margin-top:8px"></div>
+
+  <div class="sectiontitle" style="margin-top:8px;margin-bottom:4px">
+    <div><h3>Sortieren</h3></div>
+    <select id="librarySort" style="width:auto" onchange="renderLibrary()">
+      <option value="name">A–Z</option>
+      <option value="plays">Am häufigsten gespielt</option>
+      <option value="rating">Beste Bewertung</option>
+      <option value="last">Zuletzt gespielt</option>
+      <option value="timeAsc">Kürzeste Dauer</option>
+    </select>
+  </div>
+</div>
+<div id="libraryCount" class="small muted" style="padding:2px 3px 10px"></div>
+<div id="gameGrid" class="games"></div>
+</section>
+<section id="random"<section id="random" class="hidden"><div class="panel filters"><h2>🎲 Was möchtest du spielen?</h2><p class="muted">Setze ein paar Kriterien – oder lass dich komplett überraschen.</p><div class="formgrid">
 <div><label>Spieler</label><select id="rPlayers"><option value="">egal</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option></select></div>
 <div><label>Max. Spieldauer</label><select id="rTime"><option value="">egal</option><option value="30">30 min</option><option value="60">60 min</option><option value="120">120 min</option></select></div>
 <div><label>Kategorie</label><select id="rCat"><option value="">egal</option></select></div>
@@ -222,11 +291,88 @@ function save(){localStorage.setItem("myBoardGames",JSON.stringify(games));}
 function show(id){document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));let n=document.getElementById("nav"+id);if(n)n.classList.add("active");document.getElementById("title").textContent=id==="home"?"Schön, dass du da bist!":({library:"Meine Spiele",random:"Zufallsauswahl",favorites:"Favoriten",recent:"Zuletzt gespielt",stats:"Statistik",add:"Spiel hinzufügen",settings:"Einstellungen"}[id]||"Meine Spiele");renderAll();}
 function coverClass(i){return i%3===1?"":" c2"}
 function card(g,i){return `<article class="game"><div class="coverwrap">${coverHTML(g)}</div><div class="gamebody"><strong>${g.name}</strong><div class="meta">👥 ${g.players} · ⏱️ ${g.time} min</div><div class="meta">⭐ ${g.rating?g.rating+"/5":"noch nicht bewertet"} · ${catText(g)}</div><button class="btn full" onclick="openDetails(${g.id})">Details →</button><button class="btn secondary full" onclick="played(${g.id})">Als gespielt markieren</button></div></article>`}
-function renderLibrary(){let q=(document.getElementById("search")?.value||"").toLowerCase();let active=document.querySelector("#chips .active")?.dataset.cat||"";let arr=games.filter(g=>(!q||g.name.toLowerCase().includes(q))&&(!active||g.cat===active));document.getElementById("gameGrid").innerHTML=arr.length?arr.map(card).join(""):`<div class="empty">Keine Spiele gefunden.</div>`}
+function playerRange(g){
+  const nums=(String(g.players).match(/\d+/g)||[]).map(Number);
+  if(!nums.length)return [0,99];
+  if(nums.length===1)return [nums[0],nums[0]];
+  return [nums[0],nums[nums.length-1]];
+}
+function supportsPlayer(g,wanted){
+  if(!wanted)return true;
+  const [min,max]=playerRange(g);
+  if(wanted==="5")return max>=5;
+  const n=+wanted;
+  return min<=n&&max>=n;
+}
+function isNewGame(g){
+  if(!g.addedAt)return false;
+  const d=new Date(g.addedAt+"T12:00:00");
+  const days=(Date.now()-d.getTime())/86400000;
+  return days>=0&&days<=30;
+}
+function renderLibrary(){
+  const q=(document.getElementById("search")?.value||"").trim().toLowerCase();
+  const active=document.querySelector("#chips .active")?.dataset.cat||"";
+  const art=document.getElementById("filterArt")?.value||"";
+  const time=+(document.getElementById("filterTime")?.value||0);
+  const players=document.getElementById("filterPlayers")?.value||"";
+  const special=document.getElementById("filterSpecial")?.value||"";
+  const sort=document.getElementById("librarySort")?.value||"name";
+
+  let arr=games.filter(g=>{
+    const text=(g.name+" "+catText(g)).toLowerCase();
+    if(q&&!text.includes(q))return false;
+    if(active&&!catsOf(g).includes(active))return false;
+    if(art&&!catsOf(g).includes(art))return false;
+    if(time&&g.time>time)return false;
+    if(players&&!supportsPlayer(g,players))return false;
+    if(special==="fav"&&!g.fav)return false;
+    if(special==="rare"&&g.plays>1)return false;
+    if(special==="new"&&!isNewGame(g))return false;
+    return true;
+  });
+
+  arr.sort((a,b)=>{
+    if(sort==="plays")return (b.plays||0)-(a.plays||0)||a.name.localeCompare(b.name,"de");
+    if(sort==="rating")return (b.rating||0)-(a.rating||0)||(b.plays||0)-(a.plays||0);
+    if(sort==="last")return (b.last||"").localeCompare(a.last||"")||a.name.localeCompare(b.name,"de");
+    if(sort==="timeAsc")return (a.time||0)-(b.time||0)||a.name.localeCompare(b.name,"de");
+    return a.name.localeCompare(b.name,"de");
+  });
+
+  document.getElementById("libraryCount").textContent=`${arr.length} von ${games.length} Spielen`;
+  document.getElementById("gameGrid").innerHTML=arr.length?arr.map(card).join(""):`<div class="empty">Keine Spiele mit diesen Filtern gefunden.</div>`;
+}
 function renderChips(){let all=[...new Set(games.flatMap(g=>catsOf(g)))];document.getElementById("chips").innerHTML=`<button class="chip active" data-cat="" onclick="chip(this)">Alle</button>`+all.map(c=>`<button class="chip" data-cat="${c}" onclick="chip(this)">${c}</button>`).join("")}
 function chip(el){document.querySelectorAll("#chips .chip").forEach(x=>x.classList.remove("active"));el.classList.add("active");renderLibrary()}
 function renderGrid(id,arr){document.getElementById(id).innerHTML=arr.length?arr.map(card).join(""):`<div class="empty">Noch nichts vorhanden.</div>`}
-function renderAll(){renderChips();renderLibrary();renderGrid("favGrid",games.filter(g=>g.fav));renderGrid("recentGrid",[...games].sort((a,b)=>(b.last||"").localeCompare(a.last||"")).slice(0,8));document.getElementById("countTile").textContent=`${games.length} Spiele in deiner Sammlung`;let catsel=document.getElementById("rCat");if(catsel)catsel.innerHTML='<option value="">egal</option>'+[...new Set(games.flatMap(g=>catsOf(g)))].map(c=>`<option>${c}</option>`).join("");renderStats();}
+function renderAll(){
+  renderChips();
+  renderLibrary();
+  renderGrid("favGrid",games.filter(g=>g.fav));
+  renderGrid("recentGrid",[...games].sort((a,b)=>(b.last||"").localeCompare(a.last||"")).slice(0,8));
+  document.getElementById("countTile").textContent=`${games.length} Spiele in deiner Sammlung`;
+  let cats=[...new Set(games.flatMap(g=>catsOf(g)))].sort();
+  let catsel=document.getElementById("rCat");
+  if(catsel)catsel.innerHTML='<option value="">egal</option>'+cats.map(c=>`<option>${c}</option>`).join("");
+  let art=document.getElementById("filterArt");
+  if(art){
+    let current=art.value;
+    art.innerHTML='<option value="">Alle Arten</option>'+cats.map(c=>`<option value="${c}">${c}</option>`).join("");
+    if(cats.includes(current))art.value=current;
+  }
+  renderStats();
+}
+function clearLibraryFilters(){
+  const ids=["search","filterArt","filterTime","filterPlayers","filterSpecial"];
+  ids.forEach(id=>{let e=document.getElementById(id);if(e)e.value=""});
+  document.querySelectorAll("#chips .chip").forEach(x=>x.classList.remove("active"));
+  const all=document.querySelector("#chips .chip[data-cat='']");
+  if(all)all.classList.add("active");
+  const sort=document.getElementById("librarySort");
+  if(sort)sort.value="name";
+  renderLibrary();
+}
 function played(id){let g=games.find(x=>x.id===id);g.plays++;g.last=new Date().toISOString().slice(0,10);save();alert(`✓ ${g.name} als gespielt markiert.`);renderAll();}
 function quickRandom(){
   if(!games.length)return;
@@ -242,7 +388,7 @@ function pickRandom(){let p=document.getElementById("rPlayers").value,t=+documen
 
 function selectedCats(id){return [...document.querySelectorAll("#"+id+" .chip.active")].map(x=>x.dataset.cat)}
 
-function addGame(){let name=document.getElementById("fName").value.trim();if(!name){alert("Bitte einen Namen eingeben.");return}games.push({id:Date.now(),name,players:document.getElementById("fPlayers").value||"2–4",time:+document.getElementById("fTime").value||60,cat:selectedCats("fCats")[0]||"Sonstiges",categories:selectedCats("fCats").length?selectedCats("fCats"):["Sonstiges"],diff:document.getElementById("fDiff").value,rating:+document.getElementById("fRating").value,plays:0,fav:false,last:""});save();["fName","fPlayers","fTime"].forEach(x=>document.getElementById(x).value="");document.querySelectorAll("#fCats .chip").forEach(x=>x.classList.remove("active"));show("library");}
+function addGame(){let name=document.getElementById("fName").value.trim();if(!name){alert("Bitte einen Namen eingeben.");return}games.push({id:Date.now(),addedAt:new Date().toISOString().slice(0,10),name,players:document.getElementById("fPlayers").value||"2–4",time:+document.getElementById("fTime").value||60,cat:selectedCats("fCats")[0]||"Sonstiges",categories:selectedCats("fCats").length?selectedCats("fCats"):["Sonstiges"],diff:document.getElementById("fDiff").value,rating:+document.getElementById("fRating").value,plays:0,fav:false,last:""});save();["fName","fPlayers","fTime"].forEach(x=>document.getElementById(x).value="");document.querySelectorAll("#fCats .chip").forEach(x=>x.classList.remove("active"));show("library");}
 function renderStats(){let total=games.reduce((a,g)=>a+g.plays,0),hours=Math.round(games.reduce((a,g)=>a+g.plays*g.time,0)/60);document.getElementById("statsGrid").innerHTML=`<div class="stat">🎲<b>${games.length}</b><span class="muted">Spiele insgesamt</span></div><div class="stat">⭐<b>${total}</b><span class="muted">Partien gespielt</span></div><div class="stat">⏱️<b>${hours} h</b><span class="muted">Spielzeit</span></div><div class="stat">🏷️<b>${new Set(games.map(g=>g.cat)).size}</b><span class="muted">Kategorien</span></div>`;document.getElementById("topGames").innerHTML=[...games].sort((a,b)=>b.plays-a.plays).slice(0,5).map((g,i)=>`<div class="row between" style="padding:9px 0;border-bottom:1px solid #eee"><span>${i+1}. ${g.name}</span><b>${g.plays}×</b></div>`).join("")}
 function exportData(){let blob=new Blob([JSON.stringify(games,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="meine-brettspiele.json";a.click();URL.revokeObjectURL(a.href)}
 function importData(){let i=document.createElement("input");i.type="file";i.accept=".json";i.onchange=()=>{let r=new FileReader();r.onload=()=>{try{games=JSON.parse(r.result);save();renderAll();alert("Sammlung importiert.");}catch(e){alert("Datei konnte nicht gelesen werden.")}};r.readAsText(i.files[0])};i.click()}
