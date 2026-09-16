@@ -126,19 +126,7 @@ header h1{
   .gameactions .playedicon{width:40px;min-width:40px;height:40px;flex-basis:40px}
 }
 
-/* Spiele – cleaner category filter and compact quick rating */
-.libraryCategoryRow{margin-top:10px}
-.categorySelectWrap{
-  display:flex;align-items:center;gap:9px;min-height:44px;padding:0 12px;
-  border:1px solid #e5e9e5;border-radius:14px;background:#fff;
-  box-shadow:0 3px 12px rgba(28,43,35,.045)
-}
-.categoryIcon{font-size:15px}
-.categorySelectWrap select{
-  flex:1;border:0!important;box-shadow:none!important;background:transparent!important;
-  min-height:42px;padding:0!important;font-size:14px;font-weight:650;color:#34443b;
-  outline:none;
-}
+/* Spiele – kompakter Filter + Schnellbewertung */
 .cardQuickRate{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   margin-top:9px;padding:6px 3px 7px;border-radius:11px;background:#f7f8f6;
@@ -198,7 +186,7 @@ header h1{
 
   <div class="filtergrid">
     <div>
-      <label class="fieldlabel">🏷️ Art</label>
+      <label class="fieldlabel">🏷️ Kategorie</label>
       <select id="filterArt" onchange="renderLibrary()"></select>
     </div>
     <div>
@@ -234,17 +222,7 @@ header h1{
       </select>
     </div>
   </div>
-
-  <div class="libraryCategoryRow">
-  <div class="categorySelectWrap">
-    <span class="categoryIcon">🏷️</span>
-    <select id="libraryCategory" onchange="renderLibrary()" aria-label="Kategorie filtern">
-      <option value="">Alle Kategorien</option>
-    </select>
-  </div>
-</div>
-
-  <div class="sectiontitle" style="margin-top:8px;margin-bottom:4px">
+<div class="sectiontitle" style="margin-top:8px;margin-bottom:4px">
     <div><h3>Sortieren</h3></div>
     <select id="librarySort" style="width:auto" onchange="renderLibrary()">
       <option value="name">A–Z</option>
@@ -528,7 +506,7 @@ function isNewGame(g){
 }
 function renderLibrary(){
   const q=(document.getElementById("search")?.value||"").trim().toLowerCase();
-  const active=document.getElementById("libraryCategory")?.value||"";
+  const active=document.getElementById("filterArt")?.value||"";
   const art=document.getElementById("filterArt")?.value||"";
   const time=+(document.getElementById("filterTime")?.value||0);
   const players=document.getElementById("filterPlayers")?.value||"";
@@ -559,22 +537,7 @@ function renderLibrary(){
   document.getElementById("libraryCount").textContent=`${arr.length} von ${games.length} Spielen`;
   document.getElementById("gameGrid").innerHTML=arr.length?arr.map(card).join(""):`<div class="empty">Keine Spiele mit diesen Filtern gefunden.</div>`;
 }
-function renderChips(){
-  const sel=document.getElementById("libraryCategory");
-  if(!sel)return;
-  const current=sel.value;
-  const standardCategories=[
-  "Kartenspiel","Brettspiel","Würfelspiel","Party","Familie","Kinder","Kooperativ",
-  "Solo","Teambasiert","Wettkampf","Strategie","Taktik","Duell","nur für 2 Spieler",
-  "für 2 Spieler möglich","Kennenlernspiel","Quiz","Krimi","Musik","Rollenspiel",
-  "Abenteuer","Fantasy","Story","Improvisation","Wirtschaft","Aufbau","Klassiker",
-  "Bluffen","Deduktion","Glück","Reaktion","Memory","Rätsel","Geschicklichkeit",
-  "Verhandlung","Kommunikation","Kreativ","Wissen","Schnell","Kurzes Spiel","Langes Spiel"
-];
-const all=[...new Set([...standardCategories,...games.flatMap(g=>catsOf(g))])].filter(Boolean).sort((a,b)=>a.localeCompare(b,"de"));
-  sel.innerHTML='<option value="">Alle Kategorien</option>'+all.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
-  if(all.includes(current)) sel.value=current;
-}
+function renderChips(){}
 function chip(el){document.querySelectorAll("#chips .chip").forEach(x=>x.classList.remove("active"));el.classList.add("active");renderLibrary()}
 function renderGrid(id,arr){document.getElementById(id).innerHTML=arr.length?arr.map(card).join(""):`<div class="empty">Noch nichts vorhanden.</div>`}
 function rateQuick(id,n){const g=games.find(x=>x.id===id);if(!g)return;g.rating=n;save();renderAll();}
@@ -593,7 +556,6 @@ function renderHomeRanking(){
 }
 function renderAll(){
   renderHomeRanking();
-  renderChips();
   renderLibrary();
   renderGrid("favGrid",games.filter(g=>g.fav));
   renderGrid("recentGrid",[...games].sort((a,b)=>(b.last||"").localeCompare(a.last||"")).slice(0,8));
@@ -623,7 +585,7 @@ function renderAll(){
 function clearLibraryFilters(){
   const ids=["search","filterArt","filterTime","filterPlayers","filterSpecial"];
   ids.forEach(id=>{let e=document.getElementById(id);if(e)e.value=""});
-  const category=document.getElementById("libraryCategory");
+  const category=document.getElementById("filterArt");
   if(category)category.value="";
   const sort=document.getElementById("librarySort");
   if(sort)sort.value="name";
