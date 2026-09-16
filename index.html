@@ -143,6 +143,43 @@ header h1{
   .filterChip,.filterPill{padding:7px 9px;font-size:10px}
   .libraryFilters{gap:13px}
 }
+
+/* Spiele: kompakter Kategorienfilter + Schnellbewertung */
+.categoryFilterWrap{position:relative}
+.categoryFilterButton{
+  display:flex;align-items:center;gap:8px;width:100%;min-height:46px;
+  padding:10px 13px;border:1px solid #e2e6e1;border-radius:15px;
+  background:rgba(255,255,255,.82);box-shadow:0 4px 14px rgba(31,49,40,.05);
+  color:#25372e;font-weight:700;text-align:left;
+}
+.categoryFilterButton .filterCount{margin-left:auto;font-size:12px;font-weight:700;color:#718078}
+.categoryFilterPopover{
+  position:absolute;z-index:50;top:calc(100% + 7px);left:0;right:0;
+  padding:12px;border:1px solid #e1e6e0;border-radius:18px;
+  background:rgba(255,255,255,.98);box-shadow:0 16px 40px rgba(24,42,34,.15);
+  max-height:330px;overflow:auto;
+}
+.categoryFilterHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.categoryFilterHead button{border:0;background:transparent;color:#587060;font-size:12px;font-weight:700}
+.categoryFilterOptions{display:flex;flex-wrap:wrap;gap:7px}
+.categoryFilterOption{
+  display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border-radius:999px;
+  background:#f5f7f4;border:1px solid #e5e9e4;font-size:12px;color:#45544c;
+}
+.categoryFilterOption input{accent-color:#6b9078}
+.categoryFilterOption:has(input:checked){background:#edf5ef;border-color:#b8d0bf;color:#2f6245}
+.playRateRow{display:flex;align-items:center;justify-content:center;gap:2px;margin-top:7px}
+.playRateRow button{
+  width:28px;height:28px;border:0;background:transparent;border-radius:8px;
+  font-size:18px;line-height:1;color:#c7cdc8;padding:0;
+}
+.playRateRow button.active{color:#f0b42b}
+.playRateRow button:active{transform:scale(.92)}
+.playRateLabel{font-size:10px;color:#7b857e;margin-right:4px}
+@media(max-width:700px){
+  .categoryFilterPopover{left:0;right:0;max-height:280px}
+}
+
 </style>
 <style>
 /* MODERN UI REFRESH — visual only, functionality unchanged */
@@ -450,8 +487,15 @@ h2{font-size:20px;letter-spacing:-.45px;margin:0 0 6px;font-weight:800}h3{font-s
 <div><label>Name</label><input id="fName" class="field" placeholder="z. B. Azul"></div>
 <div><label>Spieler</label><input id="fPlayers" class="field" placeholder="2–4"></div>
 <div><label>Spieldauer (Min.)</label><input id="fTime" class="field" type="number" placeholder="45"></div>
-<div><label>Kategorien</label><div id="fCats" class="chips">${CATEGORY_OPTIONS.map(c=>`<button type="button" class="chip" data-cat="${c}" onclick="this.classList.toggle("active")">${c}</button>`).join("")}</div></div>
-<div><label>Schwierigkeit</label><select id="fDiff" class="field"><option>leicht</option><option selected>mittel</option><option>schwer</option></select></div>
+<div class="categoryFilterWrap">
+      <button type="button" class="categoryFilterButton" onclick="toggleCategoryFilter()" id="categoryFilterButton">
+        <span>🏷️ Kategorie</span><span id="categoryFilterCount" class="filterCount">Alle</span><span>⌄</span>
+      </button>
+      <div id="categoryFilterPopover" class="categoryFilterPopover" hidden>
+        <div class="categoryFilterHead"><strong>Kategorien</strong><button type="button" onclick="clearCategoryFilter()">Zurücksetzen</button></div>
+        <div id="categoryFilterOptions" class="categoryFilterOptions"></div>
+      </div>
+    </div>
 <div><label>Bewertung</label><select id="fRating" class="field"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></div>
 </div><button class="btn full" onclick="addGame()">Spiel speichern</button></div></section>
 
@@ -814,7 +858,53 @@ function renderHomeRanking(){
   const medals=["🥈","🥇","🥉"];
   el.innerHTML=`<div class="podium">${order.map(i=>{const g=arr[i];const cover=g.cover?`<div class="podiumCover"><img src="${g.cover}" alt=""></div>`:`<div class="podiumCover">${esc(g.name)}</div>`;const meta=mode==="rating"?`⭐ ${g.rating}/5`:mode==="last"?`🕐 ${g.last?new Date(g.last+"T12:00:00").toLocaleDateString("de-AT"):"–"}`:`🎲 ${g.plays||0}×`;const stars=[1,2,3,4,5].map(n=>`<button class="${g.rating>=n?"active":""}" onclick="rateQuick(${g.id},${n})" title="${n} Sterne">★</button>`).join("");return `<div class="podiumPlace ${({0:"first",1:"second",2:"third"})[i]}"><div class="podiumCrown">${i===0?"👑":medals[i]}</div>${cover}<div class="podiumName">${esc(g.name)}</div><div class="podiumMeta">${meta}</div><div class="quickstars" aria-label="${esc(g.name)} bewerten">${stars}</div><div class="podiumBlock"><span class="podiumMedal">${medals[i]}</span>${i+1}</div></div>`}).join("")}</div>`;
 }
+
+function toggleCategoryFilter(){
+  const p=document.getElementById("categoryFilterPopover");
+  if(!p)return;
+  p.hidden=!p.hidden;
+}
+function clearCategoryFilter(){
+  const opts=document.querySelectorAll('#categoryFilterOptions input[type="checkbox"]');
+  opts.forEach(x=>x.checked=false);
+  if(typeof selectedCategories!=="undefined") selectedCategories=[];
+  updateCategoryFilterLabel();
+  if(typeof renderGames==="function") renderGames();
+}
+function updateCategoryFilterLabel(){
+  const count=document.getElementById("categoryFilterCount");
+  if(!count)return;
+  const n=document.querySelectorAll('#categoryFilterOptions input[type="checkbox"]:checked').length;
+  count.textContent=n?`${n} gewählt`:"Alle";
+}
+function renderCategoryFilterOptions(){
+  const box=document.getElementById("categoryFilterOptions");
+  if(!box)return;
+  const cats=Array.from(new Set((games||[]).flatMap(g=>Array.isArray(g.categories)?g.categories:[]))).filter(Boolean).sort((a,b)=>a.localeCompare(b,"de"));
+  box.innerHTML=cats.map(cat=>{
+    const safe=String(cat).replace(/"/g,'&quot;');
+    return `<label class="categoryFilterOption"><input type="checkbox" value="${safe}" onchange="categoryFilterChanged(this)"> ${esc(cat)}</label>`;
+  }).join("");
+  updateCategoryFilterLabel();
+}
+function categoryFilterChanged(cb){
+  if(typeof selectedCategories==="undefined") window.selectedCategories=[];
+  if(cb.checked){
+    if(!selectedCategories.includes(cb.value)) selectedCategories.push(cb.value);
+  }else{
+    selectedCategories=selectedCategories.filter(x=>x!==cb.value);
+  }
+  updateCategoryFilterLabel();
+  if(typeof renderGames==="function") renderGames();
+}
+document.addEventListener("click",e=>{
+  const wrap=document.querySelector(".categoryFilterWrap");
+  const pop=document.getElementById("categoryFilterPopover");
+  if(wrap&&pop&&!wrap.contains(e.target)) pop.hidden=true;
+});
+
 function renderAll(){
+  renderCategoryFilterOptions();
   renderHomeRanking();
   renderQuickRate();
   renderChips();
