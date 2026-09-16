@@ -287,7 +287,7 @@ function createCustomCategory(selectId, selectedContainerId){
   if(sel){sel.innerHTML=categoryOptions().map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");sel.value=cat;}
   if(selectedContainerId) addSelectedEditCategory(cat,selectedContainerId);
 }
-games.forEach(g=>{if(!Array.isArray(g.categories))g.categories=[g.cat];g.categories=[...new Set(g.categories.map(c=>String(c||"").trim()).filter(c=>c&&c!=="×"))];if(!g.categories.length&&g.cat&&g.cat!=="×")g.categories=[g.cat];g.cat=g.categories[0]||"Sonstiges";});
+games.forEach(g=>{if(!Array.isArray(g.categories))g.categories=[g.cat];g.categories=[...new Set(g.categories.map(c=>String(c||"").trim()).filter(c=>c&&c!=="×"))];if(!g.categories.length&&g.cat&&g.cat!=="×")g.categories=[g.cat];g.cat=g.categories[0]||"";});
 function catsOf(g){const raw=Array.isArray(g.categories)&&g.categories.length?g.categories:[g.cat];return [...new Set(raw.map(c=>String(c||"").trim()).filter(c=>c&&c!=="×"))];}
 function catText(g){return catsOf(g).join(" · ");}
 const COVER_MAP={
