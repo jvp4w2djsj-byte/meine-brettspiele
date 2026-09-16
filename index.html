@@ -139,14 +139,14 @@ header h1{
   min-height:42px;padding:0!important;font-size:14px;font-weight:650;color:#34443b;
   outline:none;
 }
-.cardQuickRate{
+.cardQuickRate{overflow:visible;
   display:flex;align-items:center;justify-content:space-between;
   margin-top:9px;padding:5px 7px 5px 9px;border-radius:11px;background:#f7f8f6;
 }
 .cardQuickRate span{font-size:11px;font-weight:650;color:#7a847d}
-.cardQuickRate>div{display:flex;gap:0}
+.cardQuickRate>div{display:flex;gap:0;min-width:125px;justify-content:flex-end}
 .cardQuickRate button{
-  width:25px;height:25px;padding:0;border:0;background:transparent;
+  flex:0 0 25px;width:25px;height:25px;padding:0;border:0;background:transparent;
   color:#cbd0cb;border-radius:7px;font-size:17px;line-height:1;
 }
 .cardQuickRate button.active{color:#efb52e}
@@ -156,7 +156,7 @@ header h1{
   .categorySelectWrap select{font-size:13px}
   .cardQuickRate{margin-top:8px;padding:4px 5px 4px 8px}
   .cardQuickRate span{font-size:10px}
-  .cardQuickRate button{width:23px;height:23px;font-size:16px}
+  .cardQuickRate button{flex:0 0 23px;width:23px;height:23px;font-size:16px}
 }
 
 </style>
@@ -562,7 +562,15 @@ function renderChips(){
   const sel=document.getElementById("libraryCategory");
   if(!sel)return;
   const current=sel.value;
-  const all=[...new Set(games.flatMap(g=>catsOf(g)))].filter(Boolean).sort((a,b)=>a.localeCompare(b,"de"));
+  const standardCategories=[
+  "Kartenspiel","Brettspiel","Würfelspiel","Party","Familie","Kinder","Kooperativ",
+  "Solo","Teambasiert","Wettkampf","Strategie","Taktik","Duell","nur für 2 Spieler",
+  "für 2 Spieler möglich","Kennenlernspiel","Quiz","Krimi","Musik","Rollenspiel",
+  "Abenteuer","Fantasy","Story","Improvisation","Wirtschaft","Aufbau","Klassiker",
+  "Bluffen","Deduktion","Glück","Reaktion","Memory","Rätsel","Geschicklichkeit",
+  "Verhandlung","Kommunikation","Kreativ","Wissen","Schnell","Kurzes Spiel","Langes Spiel"
+];
+const all=[...new Set([...standardCategories,...games.flatMap(g=>catsOf(g))])].filter(Boolean).sort((a,b)=>a.localeCompare(b,"de"));
   sel.innerHTML='<option value="">Alle Kategorien</option>'+all.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
   if(all.includes(current)) sel.value=current;
 }
