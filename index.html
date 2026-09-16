@@ -667,7 +667,7 @@ function saveEdit(id){
   g.name=document.getElementById("eName").value.trim()||g.name;
   g.players=document.getElementById("ePlayers").value.trim()||g.players;
   g.time=+document.getElementById("eTime").value||g.time;
-  const chosen=selectedEditCategories(); g.categories=chosen.length?chosen:[g.cat||"Sonstiges"]; g.cat=g.categories[0]||g.cat;
+  const chosen=selectedEditCategories(); g.categories=[...new Set(chosen.filter(c=>String(c||"").trim() && c!=="×"))]; g.cat=g.categories[0]||"";
   g.diff=document.getElementById("eDiff").value;
   g.rating=+document.getElementById("eRating").value;
   g.notes=document.getElementById("eNotes").value.trim();
