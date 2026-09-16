@@ -258,6 +258,56 @@ h2{font-size:20px;letter-spacing:-.45px;margin:0 0 6px;font-weight:800}h3{font-s
   .detailcover{height:225px}.nav{width:calc(100% - 20px)}
 }
 @media(max-width:360px){.games{gap:8px}.tile{padding:12px}.tile small{display:none}.nav button{font-size:9px}.nav button b{font-size:18px}}
+
+/* Lust auf...? – Schnellbewertung */
+.quickRatePanel{margin-top:14px}
+.quickRateRefresh{
+  width:38px;height:38px;border-radius:12px;background:#f2f5f1;
+  color:#244c3a;border:1px solid #dfe6df;font-size:21px;
+  display:flex;align-items:center;justify-content:center;
+}
+.quickRateGrid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;
+}
+.quickRateCard{
+  min-width:0;background:linear-gradient(145deg,#fffdf9,#f7f8f3);
+  border:1px solid #e4e8e1;border-radius:18px;padding:9px;
+  box-shadow:0 5px 16px rgba(30,50,40,.06);
+}
+.quickRateCover{
+  width:100%;aspect-ratio:1/1.08;border-radius:13px;overflow:hidden;
+  background:#edf1ed;display:flex;align-items:center;justify-content:center;
+}
+.quickRateCover img{width:100%;height:100%;object-fit:cover;display:block}
+.quickRateName{
+  font-weight:750;font-size:13px;line-height:1.2;margin:9px 2px 6px;
+  min-height:31px;display:-webkit-box;-webkit-line-clamp:2;
+  -webkit-box-orient:vertical;overflow:hidden;
+}
+.quickRateStars{display:flex;justify-content:center;gap:0}
+.quickRateStars button{
+  background:transparent;color:#c9cec9;padding:1px 2px;font-size:19px;
+  line-height:1;border-radius:6px;
+}
+.quickRateStars button.active{color:#f2b52a}
+.quickRateStars button:active{transform:scale(.9)}
+.quickRateHint{
+  text-align:center;padding:12px 4px;color:#778078;font-size:12px;
+}
+@media(max-width:699px){
+  .quickRateGrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .quickRateCard{padding:7px;border-radius:15px}
+  .quickRateCover{border-radius:11px}
+  .quickRateName{font-size:12px;margin-top:7px;min-height:29px}
+  .quickRateStars button{font-size:17px}
+}
+@media(max-width:390px){
+  .quickRateGrid{gap:6px}
+  .quickRateCard{padding:6px}
+  .quickRateName{font-size:11px}
+  .quickRateStars button{font-size:16px;padding:1px}
+}
+
 </style>
 
 </head>
@@ -283,6 +333,17 @@ h2{font-size:20px;letter-spacing:-.45px;margin:0 0 6px;font-weight:800}h3{font-s
       </select>
     </div>
     <div id="homeTop3"></div>
+  </div>
+
+  <div class="panel quickRatePanel">
+    <div class="sectiontitle">
+      <div>
+        <h2>🎯 Lust auf...?</h2>
+        <div class="small muted">Bewerte ein paar Spiele ganz schnell</div>
+      </div>
+      <button class="quickRateRefresh" onclick="renderQuickRate()" title="Neue Spiele">↻</button>
+    </div>
+    <div id="quickRateGrid" class="quickRateGrid"></div>
   </div>
 </section>
 
@@ -655,6 +716,27 @@ function renderChips(){let all=[...new Set(games.flatMap(g=>catsOf(g)))];documen
 function chip(el){document.querySelectorAll("#chips .chip").forEach(x=>x.classList.remove("active"));el.classList.add("active");renderLibrary()}
 function renderGrid(id,arr){document.getElementById(id).innerHTML=arr.length?arr.map(card).join(""):`<div class="empty">Noch nichts vorhanden.</div>`}
 function rateQuick(id,n){const g=games.find(x=>x.id===id);if(!g)return;g.rating=n;save();renderAll();}
+function renderQuickRate(){
+  const el=document.getElementById("quickRateGrid");
+  if(!el)return;
+  let pool=games.filter(g=>!(g.rating>0));
+  if(!pool.length) pool=[...games];
+  pool.sort(()=>Math.random()-0.5);
+  const picks=pool.slice(0,3);
+  if(!picks.length){
+    el.innerHTML='<div class="quickRateHint">Noch keine Spiele in deiner Sammlung.</div>';
+    return;
+  }
+  el.innerHTML=picks.map(g=>{
+    const cover=g.cover
+      ? `<div class="quickRateCover"><img src="${g.cover}" alt=""></div>`
+      : `<div class="quickRateCover">${esc(g.name)}</div>`;
+    const stars=[1,2,3,4,5].map(n=>
+      `<button class="${g.rating>=n?"active":""}" onclick="rateQuick(${g.id},${n})" title="${n} Sterne">★</button>`
+    ).join("");
+    return `<div class="quickRateCard">${cover}<div class="quickRateName">${esc(g.name)}</div><div class="quickRateStars">${stars}</div></div>`;
+  }).join("");
+}
 function renderHomeRanking(){
   const el=document.getElementById("homeTop3"); if(!el)return;
   const mode=document.getElementById("homeRankMode")?.value||"plays";
@@ -670,6 +752,7 @@ function renderHomeRanking(){
 }
 function renderAll(){
   renderHomeRanking();
+  renderQuickRate();
   renderChips();
   renderLibrary();
   renderGrid("favGrid",games.filter(g=>g.fav));
