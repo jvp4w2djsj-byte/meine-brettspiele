@@ -125,6 +125,24 @@ header h1{
   .gameactions .detailsbtn{font-size:13px}
   .gameactions .playedicon{width:40px;min-width:40px;height:40px;flex-basis:40px}
 }
+
+/* Modern library filter UI */
+.libraryFilters{display:flex;flex-direction:column;gap:16px;margin-top:14px}
+.filterBlock{min-width:0}.filterBlock.compact{padding-top:2px}
+.filterRow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.filterLabel{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;font-size:12px;font-weight:750;color:#46524b}
+.filterCount{font-weight:600;color:#87908a;background:#f3f5f1;border-radius:999px;padding:4px 8px;font-size:10px}
+.filterChips{display:flex;flex-wrap:wrap;gap:7px;max-height:128px;overflow:auto;padding:1px 1px 3px;scrollbar-width:thin}
+.filterChip,.filterPill{border:1px solid #e2e7e1;background:#fff;color:#536059;border-radius:999px;padding:8px 11px;font-size:11px;font-weight:650;transition:all .15s ease}
+.filterChip:hover,.filterPill:hover{border-color:#b8cdbd;transform:translateY(-1px)}
+.filterChip.active,.filterPill.active{background:#dfeee3;border-color:#c3dac8;color:#1d5a3f;box-shadow:0 2px 8px rgba(34,83,59,.08)}
+.filterPills{display:flex;flex-wrap:wrap;gap:6px}
+@media(max-width:600px){
+  .filterRow{grid-template-columns:1fr;gap:12px}
+  .filterChips{max-height:154px}
+  .filterChip,.filterPill{padding:7px 9px;font-size:10px}
+  .libraryFilters{gap:13px}
+}
 </style>
 <style>
 /* MODERN UI REFRESH — visual only, functionality unchanged */
@@ -356,46 +374,53 @@ h2{font-size:20px;letter-spacing:-.45px;margin:0 0 6px;font-weight:800}h3{font-s
     <button class="btn secondary" style="padding:8px 10px;font-size:12px" onclick="clearLibraryFilters()">Zurücksetzen</button>
   </div>
 
-  <div class="filtergrid">
-    <div>
-      <label class="fieldlabel">🏷️ Art</label>
-      <select id="filterArt" onchange="renderLibrary()"></select>
+  <div class="libraryFilters">
+    <div class="filterBlock">
+      <div class="filterLabel"><span>🏷️ Kategorien</span><span id="activeFilterCount" class="filterCount">0 ausgewählt</span></div>
+      <div id="libraryCategoryFilters" class="filterChips"></div>
     </div>
-    <div>
-      <label class="fieldlabel">⏱️ Dauer</label>
-      <select id="filterTime" onchange="renderLibrary()">
-        <option value="">Alle</option>
-        <option value="15">mind. 15 Min.</option>
-        <option value="30">mind. 30 Min.</option>
-        <option value="45">mind. 45 Min.</option>
-        <option value="60">mind. 60 Min.</option>
-        <option value="90">mind. 90 Min.</option>
-        <option value="120">mind. 120 Min.</option>
-      </select>
+
+    <div class="filterRow">
+      <div class="filterBlock compact">
+        <div class="filterLabel"><span>👥 Spieler</span></div>
+        <div class="filterPills" id="playerFilterPills">
+          <button type="button" class="filterPill active" data-value="" onclick="setPlayerFilter(this)">Alle</button>
+          <button type="button" class="filterPill" data-value="1" onclick="setPlayerFilter(this)">1</button>
+          <button type="button" class="filterPill" data-value="2" onclick="setPlayerFilter(this)">2</button>
+          <button type="button" class="filterPill" data-value="3" onclick="setPlayerFilter(this)">3</button>
+          <button type="button" class="filterPill" data-value="4" onclick="setPlayerFilter(this)">4</button>
+          <button type="button" class="filterPill" data-value="5" onclick="setPlayerFilter(this)">5+</button>
+        </div>
+        <input type="hidden" id="filterPlayers" value="">
+      </div>
+
+      <div class="filterBlock compact">
+        <div class="filterLabel"><span>⏱️ Dauer</span></div>
+        <div class="filterPills" id="timeFilterPills">
+          <button type="button" class="filterPill active" data-value="" onclick="setTimeFilter(this)">Alle</button>
+          <button type="button" class="filterPill" data-value="15" onclick="setTimeFilter(this)">15+</button>
+          <button type="button" class="filterPill" data-value="30" onclick="setTimeFilter(this)">30+</button>
+          <button type="button" class="filterPill" data-value="45" onclick="setTimeFilter(this)">45+</button>
+          <button type="button" class="filterPill" data-value="60" onclick="setTimeFilter(this)">60+</button>
+          <button type="button" class="filterPill" data-value="90" onclick="setTimeFilter(this)">90+</button>
+          <button type="button" class="filterPill" data-value="120" onclick="setTimeFilter(this)">120+</button>
+        </div>
+        <input type="hidden" id="filterTime" value="">
+      </div>
     </div>
-    <div>
-      <label class="fieldlabel">👥 Spieler</label>
-      <select id="filterPlayers" onchange="renderLibrary()">
-        <option value="">Alle</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5+</option>
-      </select>
-    </div>
-    <div>
-      <label class="fieldlabel">⭐ Status</label>
-      <select id="filterSpecial" onchange="renderLibrary()">
-        <option value="">Alle Spiele</option>
-        <option value="fav">❤️ Favoriten</option>
-        <option value="rare">🕐 Selten gespielt</option>
-        <option value="new">✨ Neu hinzugefügt</option>
-      </select>
+
+    <div class="filterBlock compact">
+      <div class="filterLabel"><span>⭐ Status</span></div>
+      <div class="filterPills" id="specialFilterPills">
+        <button type="button" class="filterPill active" data-value="" onclick="setSpecialFilter(this)">Alle</button>
+        <button type="button" class="filterPill" data-value="fav" onclick="setSpecialFilter(this)">❤️ Favoriten</button>
+        <button type="button" class="filterPill" data-value="rare" onclick="setSpecialFilter(this)">🕐 Selten gespielt</button>
+        <button type="button" class="filterPill" data-value="new" onclick="setSpecialFilter(this)">✨ Neu</button>
+      </div>
+      <input type="hidden" id="filterSpecial" value="">
     </div>
   </div>
 
-  <div class="chips" id="chips" style="margin-top:8px"></div>
 
   <div class="sectiontitle" style="margin-top:8px;margin-bottom:4px">
     <div><h3>Sortieren</h3></div>
@@ -701,10 +726,27 @@ function isNewGame(g){
   const days=(Date.now()-d.getTime())/86400000;
   return days>=0&&days<=30;
 }
+let libraryFilterCategories=new Set();
+function renderLibraryCategoryFilters(){
+  const el=document.getElementById("libraryCategoryFilters");
+  if(!el)return;
+  const cats=categoryOptions();
+  el.innerHTML=cats.map(c=>`<button type="button" class="filterChip ${libraryFilterCategories.has(c)?"active":""}" data-cat="${esc(c)}" onclick="toggleLibraryCategory(this.dataset.cat)">${esc(c)}</button>`).join("");
+  const count=document.getElementById("activeFilterCount");
+  if(count)count.textContent=libraryFilterCategories.size===1?"1 ausgewählt":`${libraryFilterCategories.size} ausgewählt`;
+}
+function toggleLibraryCategory(cat){
+  if(libraryFilterCategories.has(cat))libraryFilterCategories.delete(cat);else libraryFilterCategories.add(cat);
+  renderLibraryCategoryFilters();renderLibrary();
+}
+function setPlayerFilter(el){document.querySelectorAll("#playerFilterPills .filterPill").forEach(x=>x.classList.remove("active"));el.classList.add("active");document.getElementById("filterPlayers").value=el.dataset.value||"";renderLibrary();}
+function setTimeFilter(el){document.querySelectorAll("#timeFilterPills .filterPill").forEach(x=>x.classList.remove("active"));el.classList.add("active");document.getElementById("filterTime").value=el.dataset.value||"";renderLibrary();}
+function setSpecialFilter(el){document.querySelectorAll("#specialFilterPills .filterPill").forEach(x=>x.classList.remove("active"));el.classList.add("active");document.getElementById("filterSpecial").value=el.dataset.value||"";renderLibrary();}
+function resetPillGroup(id){const wrap=document.getElementById(id);if(!wrap)return;wrap.querySelectorAll(".filterPill").forEach(x=>x.classList.remove("active"));const first=wrap.querySelector('.filterPill[data-value=""]');if(first)first.classList.add("active");}
 function renderLibrary(){
   const q=(document.getElementById("search")?.value||"").trim().toLowerCase();
   const active=document.querySelector("#chips .active")?.dataset.cat||"";
-  const art=document.getElementById("filterArt")?.value||"";
+  const selectedCats=[...libraryFilterCategories];
   const time=+(document.getElementById("filterTime")?.value||0);
   const players=document.getElementById("filterPlayers")?.value||"";
   const special=document.getElementById("filterSpecial")?.value||"";
@@ -714,7 +756,7 @@ function renderLibrary(){
     const text=(g.name+" "+catText(g)).toLowerCase();
     if(q&&!text.includes(q))return false;
     if(active&&!catsOf(g).includes(active))return false;
-    if(art&&!catsOf(g).includes(art))return false;
+    if(selectedCats.length&&!selectedCats.some(c=>catsOf(g).includes(c)))return false;
     if(time&&g.time<time)return false;
     if(players&&!supportsPlayer(g,players))return false;
     if(special==="fav"&&!g.fav)return false;
@@ -734,8 +776,8 @@ function renderLibrary(){
   document.getElementById("libraryCount").textContent=`${arr.length} von ${games.length} Spielen`;
   document.getElementById("gameGrid").innerHTML=arr.length?arr.map(card).join(""):`<div class="empty">Keine Spiele mit diesen Filtern gefunden.</div>`;
 }
-function renderChips(){let all=[...new Set(games.flatMap(g=>catsOf(g)))];document.getElementById("chips").innerHTML=`<button class="chip active" data-cat="" onclick="chip(this)">Alle</button>`+all.map(c=>`<button class="chip" data-cat="${c}" onclick="chip(this)">${c}</button>`).join("")}
-function chip(el){document.querySelectorAll("#chips .chip").forEach(x=>x.classList.remove("active"));el.classList.add("active");renderLibrary()}
+function renderChips(){}
+function chip(el){}
 function renderGrid(id,arr){document.getElementById(id).innerHTML=arr.length?arr.map(card).join(""):`<div class="empty">Noch nichts vorhanden.</div>`}
 function rateQuick(id,n){const g=games.find(x=>x.id===id);if(!g)return;g.rating=n;save();renderAll();}
 function renderQuickRate(){
@@ -783,22 +825,20 @@ function renderAll(){
   let cats=[...new Set(games.flatMap(g=>catsOf(g)))].sort();
   let catsel=document.getElementById("rCat");
   if(catsel)catsel.innerHTML='<option value="">egal</option>'+cats.map(c=>`<option>${c}</option>`).join("");
-  let art=document.getElementById("filterArt");
-  if(art){
-    let current=art.value;
-    art.innerHTML='<option value="">Alle Arten</option>'+cats.map(c=>`<option value="${c}">${c}</option>`).join("");
-    if(cats.includes(current))art.value=current;
-  }
+  renderLibraryCategoryFilters();
   renderStats();
 }
 function clearLibraryFilters(){
-  const ids=["search","filterArt","filterTime","filterPlayers","filterSpecial"];
+  const ids=["search","filterTime","filterPlayers","filterSpecial"];
   ids.forEach(id=>{let e=document.getElementById(id);if(e)e.value=""});
-  document.querySelectorAll("#chips .chip").forEach(x=>x.classList.remove("active"));
-  const all=document.querySelector("#chips .chip[data-cat='']");
-  if(all)all.classList.add("active");
+  libraryFilterCategories.clear();
+  resetPillGroup("playerFilterPills");
+  resetPillGroup("timeFilterPills");
+  resetPillGroup("specialFilterPills");
+
   const sort=document.getElementById("librarySort");
   if(sort)sort.value="name";
+  renderLibraryCategoryFilters();
   renderLibrary();
 }
 function played(id){let g=games.find(x=>x.id===id);g.plays++;g.last=new Date().toISOString().slice(0,10);save();alert(`✓ ${g.name} als gespielt markiert.`);renderAll();}
