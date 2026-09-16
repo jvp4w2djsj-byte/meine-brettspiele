@@ -126,245 +126,40 @@ header h1{
   .gameactions .playedicon{width:40px;min-width:40px;height:40px;flex-basis:40px}
 }
 
-/* Modern library filter UI */
-.libraryFilters{display:flex;flex-direction:column;gap:16px;margin-top:14px}
-.filterBlock{min-width:0}.filterBlock.compact{padding-top:2px}
-.filterRow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.filterLabel{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;font-size:12px;font-weight:750;color:#46524b}
-.filterCount{font-weight:600;color:#87908a;background:#f3f5f1;border-radius:999px;padding:4px 8px;font-size:10px}
-.filterChips{display:flex;flex-wrap:wrap;gap:7px;max-height:128px;overflow:auto;padding:1px 1px 3px;scrollbar-width:thin}
-.filterChip,.filterPill{border:1px solid #e2e7e1;background:#fff;color:#536059;border-radius:999px;padding:8px 11px;font-size:11px;font-weight:650;transition:all .15s ease}
-.filterChip:hover,.filterPill:hover{border-color:#b8cdbd;transform:translateY(-1px)}
-.filterChip.active,.filterPill.active{background:#dfeee3;border-color:#c3dac8;color:#1d5a3f;box-shadow:0 2px 8px rgba(34,83,59,.08)}
-.filterPills{display:flex;flex-wrap:wrap;gap:6px}
-@media(max-width:600px){
-  .filterRow{grid-template-columns:1fr;gap:12px}
-  .filterChips{max-height:154px}
-  .filterChip,.filterPill{padding:7px 9px;font-size:10px}
-  .libraryFilters{gap:13px}
+/* Spiele – cleaner category filter and compact quick rating */
+.libraryCategoryRow{margin-top:10px}
+.categorySelectWrap{
+  display:flex;align-items:center;gap:9px;min-height:44px;padding:0 12px;
+  border:1px solid #e5e9e5;border-radius:14px;background:#fff;
+  box-shadow:0 3px 12px rgba(28,43,35,.045)
 }
-
-/* Spiele: kompakter Kategorienfilter + Schnellbewertung */
-.categoryFilterWrap{position:relative}
-.categoryFilterButton{
-  display:flex;align-items:center;gap:8px;width:100%;min-height:46px;
-  padding:10px 13px;border:1px solid #e2e6e1;border-radius:15px;
-  background:rgba(255,255,255,.82);box-shadow:0 4px 14px rgba(31,49,40,.05);
-  color:#25372e;font-weight:700;text-align:left;
+.categoryIcon{font-size:15px}
+.categorySelectWrap select{
+  flex:1;border:0!important;box-shadow:none!important;background:transparent!important;
+  min-height:42px;padding:0!important;font-size:14px;font-weight:650;color:#34443b;
+  outline:none;
 }
-.categoryFilterButton .filterCount{margin-left:auto;font-size:12px;font-weight:700;color:#718078}
-.categoryFilterPopover{
-  position:absolute;z-index:50;top:calc(100% + 7px);left:0;right:0;
-  padding:12px;border:1px solid #e1e6e0;border-radius:18px;
-  background:rgba(255,255,255,.98);box-shadow:0 16px 40px rgba(24,42,34,.15);
-  max-height:330px;overflow:auto;
+.cardQuickRate{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:9px;padding:5px 7px 5px 9px;border-radius:11px;background:#f7f8f6;
 }
-.categoryFilterHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
-.categoryFilterHead button{border:0;background:transparent;color:#587060;font-size:12px;font-weight:700}
-.categoryFilterOptions{display:flex;flex-wrap:wrap;gap:7px}
-.categoryFilterOption{
-  display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border-radius:999px;
-  background:#f5f7f4;border:1px solid #e5e9e4;font-size:12px;color:#45544c;
+.cardQuickRate span{font-size:11px;font-weight:650;color:#7a847d}
+.cardQuickRate>div{display:flex;gap:0}
+.cardQuickRate button{
+  width:25px;height:25px;padding:0;border:0;background:transparent;
+  color:#cbd0cb;border-radius:7px;font-size:17px;line-height:1;
 }
-.categoryFilterOption input{accent-color:#6b9078}
-.categoryFilterOption:has(input:checked){background:#edf5ef;border-color:#b8d0bf;color:#2f6245}
-.playRateRow{display:flex;align-items:center;justify-content:center;gap:2px;margin-top:7px}
-.playRateRow button{
-  width:28px;height:28px;border:0;background:transparent;border-radius:8px;
-  font-size:18px;line-height:1;color:#c7cdc8;padding:0;
-}
-.playRateRow button.active{color:#f0b42b}
-.playRateRow button:active{transform:scale(.92)}
-.playRateLabel{font-size:10px;color:#7b857e;margin-right:4px}
+.cardQuickRate button.active{color:#efb52e}
+.cardQuickRate button:active{transform:scale(.9)}
 @media(max-width:700px){
-  .categoryFilterPopover{left:0;right:0;max-height:280px}
+  .categorySelectWrap{min-height:42px;border-radius:13px}
+  .categorySelectWrap select{font-size:13px}
+  .cardQuickRate{margin-top:8px;padding:4px 5px 4px 8px}
+  .cardQuickRate span{font-size:10px}
+  .cardQuickRate button{width:23px;height:23px;font-size:16px}
 }
 
 </style>
-<style>
-/* MODERN UI REFRESH — visual only, functionality unchanged */
-:root{
-  --green:#123b2a;
-  --green2:#2d6a4f;
-  --cream:#f6f3ed;
-  --card:#fffefa;
-  --text:#18201c;
-  --muted:#7a827d;
-  --line:#e8e4dc;
-  --accent:#e8b35b;
-  --rose:#e8c8bd;
-  --mint:#dcece2;
-  --shadow:0 12px 35px rgba(26,48,39,.09);
-}
-html{background:var(--cream)}
-body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
-button,input,select{font-family:inherit}
-.app{background:linear-gradient(180deg,#123b2a 0,#123b2a 185px,var(--cream) 185px);padding-bottom:92px}
-header{max-width:980px;padding:calc(18px + env(safe-area-inset-top)) 20px 34px}
-header .top{height:44px}
-header .dice{font-size:25px;filter:saturate(.85)}
-header .gear{width:40px;height:40px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.13);font-size:18px;backdrop-filter:blur(10px)}
-header h1{font-size:30px;line-height:1.05;letter-spacing:-1px;margin:27px 0 7px;font-weight:800}
-header .sub{font-size:13px;opacity:.68}
-.content{max-width:980px;padding:14px 18px 24px}
-.panel{background:rgba(255,254,250,.96);border:1px solid rgba(225,220,210,.8);border-radius:24px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
-h2{font-size:20px;letter-spacing:-.35px;margin:0 0 7px;font-weight:800}h3{font-size:16px;letter-spacing:-.15px}
-.muted,.small{color:var(--muted)}
-.grid{gap:11px}.tile{position:relative;background:rgba(255,254,250,.98);border:1px solid var(--line);border-radius:22px;padding:17px;min-height:124px;box-shadow:0 8px 26px rgba(26,48,39,.065);transition:transform .18s ease,box-shadow .18s ease}
-.tile:active{transform:scale(.985)}.tile:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(26,48,39,.10)}
-.tile .ico{width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:var(--mint);border-radius:14px;font-size:21px}.tile:nth-child(3n) .ico{background:#f5e5dc}.tile:nth-child(4n) .ico{background:#f7edc8}
-.tile strong{margin-top:14px;font-size:15px}.tile small{font-size:12px;line-height:1.35}
-.sectiontitle{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.search{padding:13px 15px;border-radius:15px;border-color:var(--line);box-shadow:0 3px 10px rgba(0,0,0,.025)}
-.chips{gap:7px;padding:9px 0 3px}.chip{padding:8px 12px;border-radius:999px;background:#fff;border-color:var(--line);font-size:12px}.chip.active{background:var(--green);border-color:var(--green)}
-.games{gap:14px}.game{border:1px solid #e7e2d9;border-radius:21px;background:#fffefa;box-shadow:0 8px 26px rgba(26,48,39,.075);transition:transform .18s ease,box-shadow .18s ease}.game:hover{transform:translateY(-3px);box-shadow:0 15px 34px rgba(26,48,39,.12)}
-.coverwrap,.coverwrap .cover{height:185px}.cover{border-radius:0;background:linear-gradient(135deg,#628b72,#254b38);font-size:20px}.coverimage img{object-fit:cover}.gamebody{padding:12px}.gamebody strong{font-size:15px;line-height:1.25;letter-spacing:-.15px}.gamebody .meta{font-size:11px;line-height:1.45;margin-top:6px}
-.gameactions{gap:7px;margin-top:11px}.gameactions .detailsbtn{border-radius:12px;padding:10px 9px;font-size:13px}.gameactions .playedicon{width:43px;min-width:43px;height:43px;border-radius:12px;background:#edf2ed;font-size:19px;box-shadow:none}
-.btn{border-radius:13px;padding:11px 15px;box-shadow:0 6px 14px rgba(18,59,42,.11);font-weight:650}.btn.secondary{background:#edf2ed}.field,.filters select,.filtergrid select{border-color:var(--line);border-radius:13px;padding:11px 12px;outline:none}.field:focus,.search:focus,.filters select:focus,.filtergrid select:focus{border-color:#9bb8a5;box-shadow:0 0 0 3px rgba(45,106,79,.10)}
-.detailcover{height:270px;border-radius:22px;margin-bottom:16px}.detailitem,.stat{border:1px solid #eee9e1;background:#fff;border-radius:16px}.detailitem{padding:13px}.detailitem b{font-size:11px}.detailrating{gap:1px}.detailstar{font-size:25px}
-.detailnote{background:#f7f3eb;border:1px solid #eee8de}.selectedcat{background:#edf3ee;border-color:#d0dfd3}
-.cloudbox{background:#eff6f1;border-color:#d4e4d8}.syncbadge{background:#e9f3eb}
-.podium{gap:12px}.podiumCover{border-radius:17px 17px 9px 9px;box-shadow:0 10px 22px rgba(26,48,39,.13)}.podiumBlock{box-shadow:none}.homeRankSelect{border-color:var(--line);border-radius:12px}
-.friendcard{border-color:#e8e3db;border-radius:19px;box-shadow:0 7px 22px rgba(26,48,39,.05)}.friendchip{border-color:var(--line);background:#f7f7f4}
-.nav{left:50%;right:auto;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(92%,560px);border:1px solid rgba(220,217,208,.9);border-radius:22px;padding:7px 7px calc(7px + env(safe-area-inset-bottom));background:rgba(255,254,250,.88);box-shadow:0 12px 35px rgba(20,40,30,.16);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);gap:2px}
-.nav button{flex:1;border-radius:16px;padding:7px 5px;color:#7a817c;font-size:10px}.nav button b{font-size:19px;margin-bottom:3px}.nav button.active{background:#eaf1eb;color:var(--green)}
-@media(min-width:700px){.app{background:linear-gradient(180deg,#123b2a 0,#123b2a 205px,var(--cream) 205px)}header{padding-left:24px;padding-right:24px}.content{padding-left:24px;padding-right:24px}.games{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media(max-width:699px){
-  .app{background:linear-gradient(180deg,#123b2a 0,#123b2a 178px,var(--cream) 178px)}
-  header{padding-left:16px;padding-right:16px;padding-bottom:29px}header h1{font-size:27px;margin-top:24px}
-  .content{padding:11px 12px 26px}.panel{border-radius:21px;padding:15px}
-  .grid{gap:9px}.tile{min-height:116px;padding:14px;border-radius:19px}.tile .ico{width:38px;height:38px;border-radius:13px}.tile strong{font-size:14px;margin-top:12px}.tile small{font-size:11px}
-  .games{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.game{border-radius:18px}.coverwrap,.coverwrap .cover{height:145px}.gamebody{padding:9px}.gamebody strong{font-size:14px;min-height:35px}.gamebody .meta{font-size:10.5px}.gameactions{gap:5px}.gameactions .detailsbtn{font-size:12px;padding:9px 7px}.gameactions .playedicon{width:40px;min-width:40px;height:40px;flex-basis:40px;font-size:18px}
-  .sectiontitle{align-items:flex-start}.homeRankSelect{max-width:145px;font-size:11px}.podium{gap:5px}
-  .detailcover{height:225px}.detailgrid{gap:8px}
-  .nav{width:calc(100% - 20px)}
-}
-@media(max-width:360px){.games{gap:8px}.tile{padding:12px}.tile small{display:none}.tile strong{margin-top:10px}.nav button{font-size:9px}.nav button b{font-size:18px}}
-</style>
-
-
-<style>
-/* MODERN UI v2 — airy, colorful, app-like */
-:root{
-  --green:#245b46;
-  --green2:#39785f;
-  --cream:#f6f4ef;
-  --card:#ffffff;
-  --text:#1d2521;
-  --muted:#77807b;
-  --line:#ebe8e1;
-  --mint:#dff1e8;
-  --lav:#e9e5f7;
-  --peach:#f8e1d7;
-  --yellow:#faedc8;
-  --blue:#dfeaf7;
-  --shadow:0 10px 30px rgba(33,42,37,.07);
-}
-html,body{background:var(--cream)!important}
-body{color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
-.app{background:var(--cream)!important;padding-bottom:98px}
-header{position:relative;overflow:hidden;max-width:1050px;color:var(--text)!important;padding:calc(18px + env(safe-area-inset-top)) 22px 30px!important}
-header:before,header:after{content:"";position:absolute;border-radius:999px;pointer-events:none;filter:blur(.2px)}
-header:before{width:190px;height:190px;right:-65px;top:-95px;background:var(--lav);opacity:.9}
-header:after{width:150px;height:150px;left:-75px;top:25px;background:var(--mint);opacity:.9}
-header .top,header h1,header .sub{position:relative;z-index:1}
-header .top{height:44px}
-header .dice{font-size:25px;filter:none;background:#fff;border:1px solid var(--line);width:44px;height:44px;border-radius:15px;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 16px rgba(33,42,37,.06)}
-header .gear{color:var(--text);background:#fff;border:1px solid var(--line);box-shadow:0 5px 16px rgba(33,42,37,.06);backdrop-filter:none}
-header h1{font-size:31px;line-height:1.02;letter-spacing:-1.2px;margin:24px 0 7px;font-weight:850}
-header .sub{color:var(--muted);opacity:1;font-size:13px}
-.content{max-width:1050px;padding:8px 20px 26px!important}
-.panel{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:24px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow);backdrop-filter:blur(8px)}
-h2{font-size:20px;letter-spacing:-.45px;margin:0 0 6px;font-weight:800}h3{font-size:16px;letter-spacing:-.15px}
-.grid{gap:12px}
-.tile{position:relative;background:#fff;border:1px solid var(--line);border-radius:23px;padding:16px;min-height:126px;text-align:left;box-shadow:var(--shadow);transition:transform .18s ease,box-shadow .18s ease}
-.tile:nth-child(1) .ico{background:var(--yellow)}.tile:nth-child(2) .ico{background:var(--mint)}.tile:nth-child(3) .ico{background:var(--peach)}.tile:nth-child(4) .ico{background:var(--lav)}.tile:nth-child(5) .ico{background:var(--blue)}.tile:nth-child(6) .ico{background:#e7efe5}
-.tile:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(33,42,37,.10)}
-.tile:active{transform:scale(.985)}
-.tile .ico{width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:14px;font-size:21px}
-.tile strong{font-size:15px;margin-top:14px}.tile small{font-size:12px;line-height:1.35;color:var(--muted)}
-.search{padding:13px 15px;border-radius:15px;border:1px solid var(--line);background:#fafaf8;box-shadow:none}
-.search:focus,.field:focus,.filters select:focus,.filtergrid select:focus{border-color:#9ebbad;box-shadow:0 0 0 4px rgba(57,120,95,.08)}
-.chips{gap:7px;padding:8px 0 3px}.chip{padding:8px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:12px}.chip.active{background:var(--text);color:#fff;border-color:var(--text)}
-.games{gap:15px}.game{background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow);transition:transform .18s ease,box-shadow .18s ease}.game:hover{transform:translateY(-3px);box-shadow:0 17px 36px rgba(33,42,37,.11)}
-.coverwrap,.coverwrap .cover{height:190px}.cover{border-radius:0;background:linear-gradient(135deg,#6d8f7a,#315d49);font-size:20px}
-.coverimage img{object-fit:cover}.gamebody{padding:12px 12px 13px}.gamebody strong{font-size:15px;line-height:1.24;letter-spacing:-.15px}.gamebody .meta{font-size:11px;line-height:1.42;margin-top:6px;color:var(--muted)}
-.gameactions{gap:7px;margin-top:11px}.gameactions .detailsbtn{background:var(--text);border-radius:12px;padding:10px 9px;font-size:13px;box-shadow:none}.gameactions .playedicon{width:43px;min-width:43px;height:43px;border-radius:12px;background:#eef5f0;color:var(--green);font-size:19px;box-shadow:none}
-.btn{border-radius:13px;padding:11px 15px;font-weight:650;box-shadow:none}.btn:not(.secondary){background:var(--green)}.btn.secondary{background:#f1f3ef;color:var(--text)}
-.field,.filters select,.filtergrid select{background:#fff;border-color:var(--line);border-radius:13px;padding:11px 12px}
-.detailcover{height:270px;border-radius:24px;margin-bottom:16px;background:linear-gradient(135deg,#748d7f,#385a4b);box-shadow:none}
-.detailitem,.stat{border:1px solid var(--line);background:#fff;border-radius:17px}.detailitem{padding:13px}.detailitem b{font-size:11px;color:var(--muted)}
-.detailnote{background:#faf8f3;border:1px solid var(--line);border-radius:17px}.selectedcat{background:#edf5f0;border-color:#d6e5db;color:var(--green)}
-.cloudbox{background:#f2f7f3;border-color:#dce9df}.syncbadge{background:#e9f3eb}
-.friendcard{border-color:var(--line);border-radius:20px;box-shadow:var(--shadow)}.friendchip{border-color:var(--line);background:#f7f7f4}.friendchip.active{background:#eaf3ee;border-color:#d2e3d8;color:var(--green)}
-.nav{left:50%;right:auto;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(92%,590px);border:1px solid rgba(224,222,215,.95);border-radius:23px;padding:7px;background:rgba(255,255,255,.9);box-shadow:0 14px 40px rgba(24,32,27,.15);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);gap:3px}
-.nav button{flex:1;border-radius:16px;padding:7px 5px;color:#7d857f;font-size:10px}.nav button b{font-size:19px;margin-bottom:3px}.nav button.active{background:#edf3ee;color:var(--green)}
-.homeRanking{margin-top:14px}.homeRankSelect{border:1px solid var(--line);border-radius:12px;background:#fafaf8}
-.podiumCover{box-shadow:0 10px 24px rgba(33,42,37,.12)}
-.danger{background:#fde8e6!important;color:#bd3e35!important}
-@media(min-width:700px){.app{background:var(--cream)!important}.content{padding-left:24px!important;padding-right:24px!important}.games{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media(max-width:699px){
-  header{padding-left:16px!important;padding-right:16px!important;padding-bottom:28px!important}
-  header h1{font-size:28px;margin-top:23px}
-  .content{padding:6px 12px 26px!important}
-  .panel{border-radius:21px;padding:15px}
-  .grid{gap:9px}.tile{min-height:116px;padding:14px;border-radius:19px}.tile .ico{width:38px;height:38px;border-radius:13px}.tile strong{font-size:14px;margin-top:11px}.tile small{font-size:11px}
-  .games{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.game{border-radius:18px}.coverwrap,.coverwrap .cover{height:145px}.gamebody{padding:9px}.gamebody strong{font-size:14px;min-height:35px}.gamebody .meta{font-size:10.5px}.gameactions{gap:5px}.gameactions .detailsbtn{font-size:12px;padding:9px 7px}.gameactions .playedicon{width:40px;min-width:40px;height:40px;flex-basis:40px;font-size:18px}
-  .detailcover{height:225px}.nav{width:calc(100% - 20px)}
-}
-@media(max-width:360px){.games{gap:8px}.tile{padding:12px}.tile small{display:none}.nav button{font-size:9px}.nav button b{font-size:18px}}
-
-/* Lust auf...? – Schnellbewertung */
-.quickRatePanel{margin-top:14px}
-.quickRateRefresh{
-  width:38px;height:38px;border-radius:12px;background:#f2f5f1;
-  color:#244c3a;border:1px solid #dfe6df;font-size:21px;
-  display:flex;align-items:center;justify-content:center;
-}
-.quickRateGrid{
-  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;
-}
-.quickRateCard{
-  min-width:0;background:linear-gradient(145deg,#fffdf9,#f7f8f3);
-  border:1px solid #e4e8e1;border-radius:18px;padding:9px;
-  box-shadow:0 5px 16px rgba(30,50,40,.06);
-}
-.quickRateCover{
-  width:100%;aspect-ratio:1/1.08;border-radius:13px;overflow:hidden;
-  background:#edf1ed;display:flex;align-items:center;justify-content:center;
-}
-.quickRateCover img{width:100%;height:100%;object-fit:cover;display:block}
-.quickRateName{
-  font-weight:750;font-size:13px;line-height:1.2;margin:9px 2px 6px;
-  min-height:31px;display:-webkit-box;-webkit-line-clamp:2;
-  -webkit-box-orient:vertical;overflow:hidden;
-}
-.quickRateStars{display:flex;justify-content:center;gap:0}
-.quickRateStars button{
-  background:transparent;color:#c9cec9;padding:1px 2px;font-size:19px;
-  line-height:1;border-radius:6px;
-}
-.quickRateStars button.active{color:#f2b52a}
-.quickRateStars button:active{transform:scale(.9)}
-.quickRateHint{
-  text-align:center;padding:12px 4px;color:#778078;font-size:12px;
-}
-@media(max-width:699px){
-  .quickRateGrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-  .quickRateCard{padding:7px;border-radius:15px}
-  .quickRateCover{border-radius:11px}
-  .quickRateName{font-size:12px;margin-top:7px;min-height:29px}
-  .quickRateStars button{font-size:17px}
-}
-@media(max-width:390px){
-  .quickRateGrid{gap:6px}
-  .quickRateCard{padding:6px}
-  .quickRateName{font-size:11px}
-  .quickRateStars button{font-size:16px;padding:1px}
-}
-
-</style>
-
 </head>
 <body>
 <div class="app">
@@ -389,17 +184,6 @@ h2{font-size:20px;letter-spacing:-.45px;margin:0 0 6px;font-weight:800}h3{font-s
     </div>
     <div id="homeTop3"></div>
   </div>
-
-  <div class="panel quickRatePanel">
-    <div class="sectiontitle">
-      <div>
-        <h2>🎯 Lust auf...?</h2>
-        <div class="small muted">Bewerte ein paar Spiele ganz schnell</div>
-      </div>
-      <button class="quickRateRefresh" onclick="renderQuickRate()" title="Neue Spiele">↻</button>
-    </div>
-    <div id="quickRateGrid" class="quickRateGrid"></div>
-  </div>
 </section>
 
 <section id="library" class="hidden">
@@ -411,53 +195,53 @@ h2{font-size:20px;letter-spacing:-.45px;margin:0 0 6px;font-weight:800}h3{font-s
     <button class="btn secondary" style="padding:8px 10px;font-size:12px" onclick="clearLibraryFilters()">Zurücksetzen</button>
   </div>
 
-  <div class="libraryFilters">
-    <div class="filterBlock">
-      <div class="filterLabel"><span>🏷️ Kategorien</span><span id="activeFilterCount" class="filterCount">0 ausgewählt</span></div>
-      <div id="libraryCategoryFilters" class="filterChips"></div>
+  <div class="filtergrid">
+    <div>
+      <label class="fieldlabel">🏷️ Art</label>
+      <select id="filterArt" onchange="renderLibrary()"></select>
     </div>
-
-    <div class="filterRow">
-      <div class="filterBlock compact">
-        <div class="filterLabel"><span>👥 Spieler</span></div>
-        <div class="filterPills" id="playerFilterPills">
-          <button type="button" class="filterPill active" data-value="" onclick="setPlayerFilter(this)">Alle</button>
-          <button type="button" class="filterPill" data-value="1" onclick="setPlayerFilter(this)">1</button>
-          <button type="button" class="filterPill" data-value="2" onclick="setPlayerFilter(this)">2</button>
-          <button type="button" class="filterPill" data-value="3" onclick="setPlayerFilter(this)">3</button>
-          <button type="button" class="filterPill" data-value="4" onclick="setPlayerFilter(this)">4</button>
-          <button type="button" class="filterPill" data-value="5" onclick="setPlayerFilter(this)">5+</button>
-        </div>
-        <input type="hidden" id="filterPlayers" value="">
-      </div>
-
-      <div class="filterBlock compact">
-        <div class="filterLabel"><span>⏱️ Dauer</span></div>
-        <div class="filterPills" id="timeFilterPills">
-          <button type="button" class="filterPill active" data-value="" onclick="setTimeFilter(this)">Alle</button>
-          <button type="button" class="filterPill" data-value="15" onclick="setTimeFilter(this)">15+</button>
-          <button type="button" class="filterPill" data-value="30" onclick="setTimeFilter(this)">30+</button>
-          <button type="button" class="filterPill" data-value="45" onclick="setTimeFilter(this)">45+</button>
-          <button type="button" class="filterPill" data-value="60" onclick="setTimeFilter(this)">60+</button>
-          <button type="button" class="filterPill" data-value="90" onclick="setTimeFilter(this)">90+</button>
-          <button type="button" class="filterPill" data-value="120" onclick="setTimeFilter(this)">120+</button>
-        </div>
-        <input type="hidden" id="filterTime" value="">
-      </div>
+    <div>
+      <label class="fieldlabel">⏱️ Dauer</label>
+      <select id="filterTime" onchange="renderLibrary()">
+        <option value="">Alle</option>
+        <option value="15">mind. 15 Min.</option>
+        <option value="30">mind. 30 Min.</option>
+        <option value="45">mind. 45 Min.</option>
+        <option value="60">mind. 60 Min.</option>
+        <option value="90">mind. 90 Min.</option>
+        <option value="120">mind. 120 Min.</option>
+      </select>
     </div>
-
-    <div class="filterBlock compact">
-      <div class="filterLabel"><span>⭐ Status</span></div>
-      <div class="filterPills" id="specialFilterPills">
-        <button type="button" class="filterPill active" data-value="" onclick="setSpecialFilter(this)">Alle</button>
-        <button type="button" class="filterPill" data-value="fav" onclick="setSpecialFilter(this)">❤️ Favoriten</button>
-        <button type="button" class="filterPill" data-value="rare" onclick="setSpecialFilter(this)">🕐 Selten gespielt</button>
-        <button type="button" class="filterPill" data-value="new" onclick="setSpecialFilter(this)">✨ Neu</button>
-      </div>
-      <input type="hidden" id="filterSpecial" value="">
+    <div>
+      <label class="fieldlabel">👥 Spieler</label>
+      <select id="filterPlayers" onchange="renderLibrary()">
+        <option value="">Alle</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5+</option>
+      </select>
+    </div>
+    <div>
+      <label class="fieldlabel">⭐ Status</label>
+      <select id="filterSpecial" onchange="renderLibrary()">
+        <option value="">Alle Spiele</option>
+        <option value="fav">❤️ Favoriten</option>
+        <option value="rare">🕐 Selten gespielt</option>
+        <option value="new">✨ Neu hinzugefügt</option>
+      </select>
     </div>
   </div>
 
+  <div class="libraryCategoryRow">
+  <div class="categorySelectWrap">
+    <span class="categoryIcon">🏷️</span>
+    <select id="libraryCategory" onchange="renderLibrary()" aria-label="Kategorie filtern">
+      <option value="">Alle Kategorien</option>
+    </select>
+  </div>
+</div>
 
   <div class="sectiontitle" style="margin-top:8px;margin-bottom:4px">
     <div><h3>Sortieren</h3></div>
@@ -487,15 +271,8 @@ h2{font-size:20px;letter-spacing:-.45px;margin:0 0 6px;font-weight:800}h3{font-s
 <div><label>Name</label><input id="fName" class="field" placeholder="z. B. Azul"></div>
 <div><label>Spieler</label><input id="fPlayers" class="field" placeholder="2–4"></div>
 <div><label>Spieldauer (Min.)</label><input id="fTime" class="field" type="number" placeholder="45"></div>
-<div class="categoryFilterWrap">
-      <button type="button" class="categoryFilterButton" onclick="toggleCategoryFilter()" id="categoryFilterButton">
-        <span>🏷️ Kategorie</span><span id="categoryFilterCount" class="filterCount">Alle</span><span>⌄</span>
-      </button>
-      <div id="categoryFilterPopover" class="categoryFilterPopover" hidden>
-        <div class="categoryFilterHead"><strong>Kategorien</strong><button type="button" onclick="clearCategoryFilter()">Zurücksetzen</button></div>
-        <div id="categoryFilterOptions" class="categoryFilterOptions"></div>
-      </div>
-    </div>
+<div><label>Kategorien</label><div id="fCats" class="chips">${CATEGORY_OPTIONS.map(c=>`<button type="button" class="chip" data-cat="${c}" onclick="this.classList.toggle("active")">${c}</button>`).join("")}</div></div>
+<div><label>Schwierigkeit</label><select id="fDiff" class="field"><option>leicht</option><option selected>mittel</option><option>schwer</option></select></div>
 <div><label>Bewertung</label><select id="fRating" class="field"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></div>
 </div><button class="btn full" onclick="addGame()">Spiel speichern</button></div></section>
 
@@ -533,19 +310,12 @@ h2{font-size:20px;letter-spacing:-.45px;margin:0 0 6px;font-weight:800}h3{font-s
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const seed=[{"id":1,"name":"Dobble (Spot it! Games)","players":"2–8","time":15,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":2,"name":"Moggel Motte","players":"3–5","time":20,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":3,"name":"Kakerlakensalat","players":"2–6","time":20,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":4,"name":"Schummelhummel","players":"3–5","time":20,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":5,"name":"Kakerlakenpoker","players":"2–6","time":20,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":6,"name":"Skullqueen","players":"3–6","time":45,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":7,"name":"Exploding Kittens – Originale Edition","players":"2–5","time":15,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":8,"name":"Flip 7","players":"3–18","time":20,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":9,"name":"Druids","players":"3–5","time":30,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":10,"name":"Wizard","players":"3–6","time":45,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":11,"name":"Shadow Cards","players":"2–6","time":30,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":12,"name":"Skip-Bo","players":"2–6","time":20,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":13,"name":"Skyjo","players":"2–8","time":30,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":14,"name":"Phase 10","players":"2–6","time":45,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":15,"name":"UNO Flip","players":"2–10","time":20,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":16,"name":"Illusion","players":"2–5","time":15,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":17,"name":"Rummy","players":"2–4","time":30,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":18,"name":"DOS","players":"2–4","time":20,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":19,"name":"Abluxxen","players":"2–5","time":30,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":20,"name":"Machi Koro","players":"2–4","time":40,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":21,"name":"Machi Koro – Großstadt Erweiterung","players":"2–4","time":45,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":22,"name":"Silencio","players":"2–4","time":20,"cat":"Kooperativ","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":23,"name":"Qwixx","players":"2–5","time":15,"cat":"Würfelspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":24,"name":"Pim Pam Pum","players":"2–6","time":15,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":25,"name":"That's not a hat","players":"3–8","time":15,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":26,"name":"The Mind","players":"2–4","time":20,"cat":"Kooperativ","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":27,"name":"Hitster – Guilty Pleasures","players":"2–10","time":30,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":28,"name":"Hitster","players":"2–10","time":30,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":29,"name":"Play – The Music Party Game","players":"2–10","time":45,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":30,"name":"Klugscheisser","players":"2–6","time":30,"cat":"Quiz","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":31,"name":"Arschkarte","players":"3–6","time":30,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":32,"name":"Krime Tours","players":"2–6","time":60,"cat":"Krimi","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":33,"name":"black stories – Strange World Edition","players":"2–15","time":30,"cat":"Krimi","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":34,"name":"black stories – Daily Disasters Edition","players":"2–15","time":30,"cat":"Krimi","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":35,"name":"Im Namen des Volkes – Fall 1: Die tödlichen Goldfische","players":"2–6","time":60,"cat":"Krimi","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":36,"name":"Gemeinsame Sache (Partyfieber 4)","players":"3–8","time":30,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":37,"name":"If You Were – A Party Game","players":"3–8","time":30,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":38,"name":"Magnetic","players":"2–4","time":30,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":39,"name":"Humanity","players":"2–6","time":45,"cat":"Party","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":40,"name":"Deep Talk – Take It Serious","players":"2–10","time":45,"cat":"Kennenlernspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":41,"name":"Wahrheit oder Pflicht","players":"2–10","time":30,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":42,"name":"Risiko","players":"2–6","time":120,"cat":"Strategie","diff":"schwer","rating":0,"plays":0,"fav":false,"last":""},{"id":43,"name":"Flamecraft","players":"1–5","time":60,"cat":"Strategie","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":44,"name":"Here to Slay","players":"2–6","time":45,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":45,"name":"Keltis","players":"2–4","time":30,"cat":"Strategie","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":46,"name":"Dorfromantik Sakura","players":"1–6","time":45,"cat":"Kooperativ","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":47,"name":"Trivial Pursuit – Familienedition","players":"2–6","time":60,"cat":"Quiz","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":48,"name":"Munchkin – Basisspiel + Erweiterung","players":"3–6","time":90,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":49,"name":"Catan – Das Duell","players":"2","time":60,"cat":"nur für 2 Spieler","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":50,"name":"Animal Kingdoms","players":"1–5","time":45,"cat":"Strategie","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":51,"name":"Dice Games – 4 in 1","players":"2–6","time":20,"cat":"Würfelspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":52,"name":"99 Games","players":"2–6","time":30,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":53,"name":"Fiasco","players":"3–5","time":120,"cat":"Rollenspiel","diff":"schwer","rating":0,"plays":0,"fav":false,"last":""},{"id":54,"name":"Rummikub","players":"2–4","time":60,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":55,"name":"Würfel Ligretto","players":"2–4","time":15,"cat":"Würfelspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":56,"name":"Kampf gegen die Korinthenkacker","players":"3–8","time":30,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""}];
+const seed=[{"id":1,"name":"Dobble (Spot it! Games)","players":"2–8","time":15,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":2,"name":"Moggel Motte","players":"3–5","time":20,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":3,"name":"Kakerlakensalat","players":"2–6","time":20,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":4,"name":"Schummelhummel","players":"3–5","time":20,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":5,"name":"Kakerlakenpoker","players":"2–6","time":20,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":6,"name":"Skullqueen","players":"3–6","time":45,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":7,"name":"Exploding Kittens – Originale Edition","players":"2–5","time":15,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":8,"name":"Flip 7","players":"3–18","time":20,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":9,"name":"Druids","players":"3–5","time":30,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":10,"name":"Wizard","players":"3–6","time":45,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":11,"name":"Shadow Cards","players":"2–6","time":30,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":12,"name":"Skip-Bo","players":"2–6","time":20,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":13,"name":"Skyjo","players":"2–8","time":30,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":14,"name":"Phase 10","players":"2–6","time":45,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":15,"name":"UNO Flip","players":"2–10","time":20,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":16,"name":"Illusion","players":"2–5","time":15,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":17,"name":"Rummy","players":"2–4","time":30,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":18,"name":"DOS","players":"2–4","time":20,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":19,"name":"Abluxxen","players":"2–5","time":30,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":20,"name":"Machi Koro","players":"2–4","time":40,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":21,"name":"Machi Koro – Großstadt Erweiterung","players":"2–4","time":45,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":22,"name":"Silencio","players":"2–4","time":20,"cat":"Kooperativ","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":23,"name":"Qwixx","players":"2–5","time":15,"cat":"Würfelspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":24,"name":"Pim Pam Pum","players":"2–6","time":15,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":25,"name":"That's not a hat","players":"3–8","time":15,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":26,"name":"The Mind","players":"2–4","time":20,"cat":"Kooperativ","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":27,"name":"Hitster – Guilty Pleasures","players":"2–10","time":30,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":28,"name":"Hitster","players":"2–10","time":30,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":29,"name":"Play – The Music Party Game","players":"2–10","time":45,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":30,"name":"Klugscheisser","players":"2–6","time":30,"cat":"Quiz","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":31,"name":"Arschkarte","players":"3–6","time":30,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":32,"name":"Krime Tours","players":"2–6","time":60,"cat":"Krimi","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":33,"name":"black stories – Strange World Edition","players":"2–15","time":30,"cat":"Krimi","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":34,"name":"black stories – Daily Disasters Edition","players":"2–15","time":30,"cat":"Krimi","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":35,"name":"Im Namen des Volkes – Fall 1: Die tödlichen Goldfische","players":"2–6","time":60,"cat":"Krimi","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":36,"name":"Gemeinsame Sache (Partyfieber 4)","players":"3–8","time":30,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":37,"name":"If You Were – A Party Game","players":"3–8","time":30,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":38,"name":"Magnetic","players":"2–4","time":30,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":39,"name":"Humanity","players":"2–6","time":45,"cat":"Party","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":40,"name":"Deep Talk – Take It Serious","players":"2–10","time":45,"cat":"Gespräch","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":41,"name":"Wahrheit oder Pflicht","players":"2–10","time":30,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":42,"name":"Risiko","players":"2–6","time":120,"cat":"Strategie","diff":"schwer","rating":0,"plays":0,"fav":false,"last":""},{"id":43,"name":"Flamecraft","players":"1–5","time":60,"cat":"Strategie","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":44,"name":"Here to Slay","players":"2–6","time":45,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":45,"name":"Keltis","players":"2–4","time":30,"cat":"Strategie","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":46,"name":"Dorfromantik Sakura","players":"1–6","time":45,"cat":"Kooperativ","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":47,"name":"Trivial Pursuit – Familienedition","players":"2–6","time":60,"cat":"Quiz","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":48,"name":"Munchkin – Basisspiel + Erweiterung","players":"3–6","time":90,"cat":"Kartenspiel","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":49,"name":"Catan – Das Duell","players":"2","time":60,"cat":"Duell","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":50,"name":"Animal Kingdoms","players":"1–5","time":45,"cat":"Strategie","diff":"mittel","rating":0,"plays":0,"fav":false,"last":""},{"id":51,"name":"Dice Games – 4 in 1","players":"2–6","time":20,"cat":"Würfelspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":52,"name":"99 Games","players":"2–6","time":30,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":53,"name":"Fiasco","players":"3–5","time":120,"cat":"Rollenspiel","diff":"schwer","rating":0,"plays":0,"fav":false,"last":""},{"id":54,"name":"Rummikub","players":"2–4","time":60,"cat":"Kartenspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":55,"name":"Würfel Ligretto","players":"2–4","time":15,"cat":"Würfelspiel","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""},{"id":56,"name":"Kampf gegen die Korinthenkacker","players":"3–8","time":30,"cat":"Party","diff":"leicht","rating":0,"plays":0,"fav":false,"last":""}];
 let games=JSON.parse(localStorage.getItem("myBoardGames")||"null")||seed;
-let cats=["Strategie","Familie","Party","Kartenspiel","Kooperativ","nur für 2 Spieler","für 2 Spieler möglich","Schnell"];
-const CATEGORY_OPTIONS=[
-"Kartenspiel","Brettspiel","Würfelspiel","Strategie","Taktik","Party","Familie","Kinder","Kooperativ",
-"nur für 2 Spieler","für 2 Spieler möglich","Solo","Schnell","Kurzes Spiel","Langes Spiel","Glück","Bluffen",
-"Deduktion","Wissen","Quiz","Krimi","Kennenlernspiel","Kommunikation","Kreativ","Musik","Rollenspiel",
-"Verhandlung","Geschicklichkeit","Reaktion","Memory","Rätsel","Aufbau","Wirtschaft","Abenteuer","Fantasy",
-"Klassiker","Erweiterung","Teambasiert","Wettkampf","Story","Improvisation","Gesellschaftsspiel"
-];
+let cats=["Strategie","Familie","Party","Kartenspiel","Kooperativ","Duell","Für 2 Spieler","Schnell"];
+const CATEGORY_OPTIONS=["Kartenspiel","Würfelspiel","Strategie","Party","Familie","Kooperativ","Duell","Musik","Quiz","Krimi","Gespräch","Rollenspiel","Schnell","Für 2 Spieler"];
 let customCategories=JSON.parse(localStorage.getItem("myBoardGameCategories")||"[]");
 let friends=JSON.parse(localStorage.getItem("myBoardGameFriends")||"[]");
-normalizeGameCategories();
 function categoryOptions(){return [...new Set([...CATEGORY_OPTIONS,...customCategories,...games.flatMap(g=>catsOf(g))])].filter(Boolean).sort((a,b)=>a.localeCompare(b,"de"));}
 function saveCategories(){localStorage.setItem("myBoardGameCategories",JSON.stringify(customCategories));}
 function createCustomCategory(selectId, selectedContainerId){
@@ -557,21 +327,6 @@ function createCustomCategory(selectId, selectedContainerId){
   const sel=document.getElementById(selectId);
   if(sel){sel.innerHTML=categoryOptions().map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");sel.value=cat;}
   if(selectedContainerId) addSelectedEditCategory(cat,selectedContainerId);
-}
-function normalizeCategoryName(c){
-  const map={"Duell":"nur für 2 Spieler","Für 2 Spieler":"für 2 Spieler möglich","Gespräch":"Kennenlernspiel"};
-  const v=String(c||"").trim();
-  return map[v]||v;
-}
-function normalizeGameCategories(){
-  games.forEach(g=>{
-    const source=Array.isArray(g.categories)&&g.categories.length?g.categories:[g.cat];
-    g.categories=[...new Set(source.map(normalizeCategoryName).filter(c=>c&&c!=="×"))];
-    g.cat=normalizeCategoryName(g.cat);
-    if(!g.categories.length&&g.cat)g.categories=[g.cat];
-    if(g.categories.length)g.cat=g.categories[0];
-  });
-  customCategories=[...new Set(customCategories.map(normalizeCategoryName).filter(Boolean))];
 }
 games.forEach(g=>{if(!Array.isArray(g.categories))g.categories=[g.cat];g.categories=[...new Set(g.categories.map(c=>String(c||"").trim()).filter(c=>c&&c!=="×"))];if(!g.categories.length&&g.cat&&g.cat!=="×")g.categories=[g.cat];g.cat=g.categories[0]||"";});
 function catsOf(g){const raw=Array.isArray(g.categories)&&g.categories.length?g.categories:[g.cat];return [...new Set(raw.map(c=>String(c||"").trim()).filter(c=>c&&c!=="×"))];}
@@ -682,7 +437,7 @@ function ensureCloud(){
   localStorage.setItem(CLOUD_CONFIG_KEY,JSON.stringify({url,key}));return initCloud();
 }
 function snapshot(){return {version:1,games,customCategories,friends:(typeof friends!=="undefined"?friends:[]),savedAt:new Date().toISOString()}}
-function applySnapshot(data){if(!data)return; if(Array.isArray(data.games))games=data.games; if(Array.isArray(data.customCategories))customCategories=data.customCategories; if(Array.isArray(data.friends))friends=data.friends; normalizeGameCategories(); localStorage.setItem("myBoardGames",JSON.stringify(games));localStorage.setItem("myBoardGameCategories",JSON.stringify(customCategories));localStorage.setItem("myBoardGameFriends",JSON.stringify(friends||[]));renderAll();}
+function applySnapshot(data){if(!data)return; if(Array.isArray(data.games))games=data.games; if(Array.isArray(data.customCategories))customCategories=data.customCategories; if(Array.isArray(data.friends))friends=data.friends; localStorage.setItem("myBoardGames",JSON.stringify(games));localStorage.setItem("myBoardGameCategories",JSON.stringify(customCategories));localStorage.setItem("myBoardGameFriends",JSON.stringify(friends||[]));renderAll();}
 async function cloudSignUp(){
   if(!ensureCloud())return;const email=document.getElementById("cloudEmail").value.trim(),password=document.getElementById("cloudPassword").value;
   if(!email||password.length<6){alert("Bitte E-Mail und ein Passwort mit mindestens 6 Zeichen eingeben.");return;}
@@ -750,7 +505,7 @@ function save(){localStorage.setItem("myBoardGames",JSON.stringify(games));autoC
 function saveFriends(){localStorage.setItem("myBoardGameFriends",JSON.stringify(friends));autoCloudSave();}
 function show(id){document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));let n=document.getElementById("nav"+id);if(n)n.classList.add("active");document.getElementById("title").textContent=id==="home"?"Schön, dass du da bist!":({library:"Meine Spiele",random:"Zufallsauswahl",favorites:"Favoriten",recent:"Zuletzt gespielt",stats:"Statistik",add:"Spiel hinzufügen",settings:"Einstellungen",friends:"Freunde"}[id]||"Meine Spiele");renderAll();}
 function coverClass(i){return i%3===1?"":" c2"}
-function card(g,i){return `<article class="game"><div class="coverwrap">${coverHTML(g)}</div><div class="gamebody"><strong>${g.name}</strong><div class="meta">👥 ${g.players} · ⏱️ ${g.time} min</div><div class="meta">⭐ ${g.rating?g.rating+"/5":"noch nicht bewertet"} · ${catText(g)}</div><div class="gameactions"><button class="btn detailsbtn" onclick="openDetails(${g.id})">Details →</button><button class="btn playedicon" onclick="played(${g.id})" aria-label="Als gespielt markieren" title="Als gespielt markieren">🎲</button></div></div></article>`}
+function card(g,i){const stars=[1,2,3,4,5].map(n=>`<button class="${g.rating>=n?"active":""}" onclick="rateQuick(${g.id},${n})" aria-label="${n} Sterne" title="${n} Sterne">★</button>`).join("");return `<article class="game"><div class="coverwrap">${coverHTML(g)}</div><div class="gamebody"><strong>${g.name}</strong><div class="meta">👥 ${g.players} · ⏱️ ${g.time} min</div><div class="meta">${g.rating?`⭐ ${g.rating}/5`:"Noch nicht bewertet"} · ${catText(g)}</div><div class="gameactions"><button class="btn detailsbtn" onclick="openDetails(${g.id})">Details →</button><button class="btn playedicon" onclick="played(${g.id})" aria-label="Als gespielt markieren" title="Als gespielt markieren">🎲</button></div><div class="cardQuickRate"><span>Bewerten</span><div>${stars}</div></div></div></article>`}
 function playerRange(g){
   const nums=(String(g.players).match(/\d+/g)||[]).map(Number);
   if(!nums.length)return [0,99];
@@ -770,27 +525,10 @@ function isNewGame(g){
   const days=(Date.now()-d.getTime())/86400000;
   return days>=0&&days<=30;
 }
-let libraryFilterCategories=new Set();
-function renderLibraryCategoryFilters(){
-  const el=document.getElementById("libraryCategoryFilters");
-  if(!el)return;
-  const cats=categoryOptions();
-  el.innerHTML=cats.map(c=>`<button type="button" class="filterChip ${libraryFilterCategories.has(c)?"active":""}" data-cat="${esc(c)}" onclick="toggleLibraryCategory(this.dataset.cat)">${esc(c)}</button>`).join("");
-  const count=document.getElementById("activeFilterCount");
-  if(count)count.textContent=libraryFilterCategories.size===1?"1 ausgewählt":`${libraryFilterCategories.size} ausgewählt`;
-}
-function toggleLibraryCategory(cat){
-  if(libraryFilterCategories.has(cat))libraryFilterCategories.delete(cat);else libraryFilterCategories.add(cat);
-  renderLibraryCategoryFilters();renderLibrary();
-}
-function setPlayerFilter(el){document.querySelectorAll("#playerFilterPills .filterPill").forEach(x=>x.classList.remove("active"));el.classList.add("active");document.getElementById("filterPlayers").value=el.dataset.value||"";renderLibrary();}
-function setTimeFilter(el){document.querySelectorAll("#timeFilterPills .filterPill").forEach(x=>x.classList.remove("active"));el.classList.add("active");document.getElementById("filterTime").value=el.dataset.value||"";renderLibrary();}
-function setSpecialFilter(el){document.querySelectorAll("#specialFilterPills .filterPill").forEach(x=>x.classList.remove("active"));el.classList.add("active");document.getElementById("filterSpecial").value=el.dataset.value||"";renderLibrary();}
-function resetPillGroup(id){const wrap=document.getElementById(id);if(!wrap)return;wrap.querySelectorAll(".filterPill").forEach(x=>x.classList.remove("active"));const first=wrap.querySelector('.filterPill[data-value=""]');if(first)first.classList.add("active");}
 function renderLibrary(){
   const q=(document.getElementById("search")?.value||"").trim().toLowerCase();
-  const active=document.querySelector("#chips .active")?.dataset.cat||"";
-  const selectedCats=[...libraryFilterCategories];
+  const active=document.getElementById("libraryCategory")?.value||"";
+  const art=document.getElementById("filterArt")?.value||"";
   const time=+(document.getElementById("filterTime")?.value||0);
   const players=document.getElementById("filterPlayers")?.value||"";
   const special=document.getElementById("filterSpecial")?.value||"";
@@ -800,7 +538,7 @@ function renderLibrary(){
     const text=(g.name+" "+catText(g)).toLowerCase();
     if(q&&!text.includes(q))return false;
     if(active&&!catsOf(g).includes(active))return false;
-    if(selectedCats.length&&!selectedCats.some(c=>catsOf(g).includes(c)))return false;
+    if(art&&!catsOf(g).includes(art))return false;
     if(time&&g.time<time)return false;
     if(players&&!supportsPlayer(g,players))return false;
     if(special==="fav"&&!g.fav)return false;
@@ -820,31 +558,17 @@ function renderLibrary(){
   document.getElementById("libraryCount").textContent=`${arr.length} von ${games.length} Spielen`;
   document.getElementById("gameGrid").innerHTML=arr.length?arr.map(card).join(""):`<div class="empty">Keine Spiele mit diesen Filtern gefunden.</div>`;
 }
-function renderChips(){}
-function chip(el){}
+function renderChips(){
+  const sel=document.getElementById("libraryCategory");
+  if(!sel)return;
+  const current=sel.value;
+  const all=[...new Set(games.flatMap(g=>catsOf(g)))].filter(Boolean).sort((a,b)=>a.localeCompare(b,"de"));
+  sel.innerHTML='<option value="">Alle Kategorien</option>'+all.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
+  if(all.includes(current)) sel.value=current;
+}
+function chip(el){document.querySelectorAll("#chips .chip").forEach(x=>x.classList.remove("active"));el.classList.add("active");renderLibrary()}
 function renderGrid(id,arr){document.getElementById(id).innerHTML=arr.length?arr.map(card).join(""):`<div class="empty">Noch nichts vorhanden.</div>`}
 function rateQuick(id,n){const g=games.find(x=>x.id===id);if(!g)return;g.rating=n;save();renderAll();}
-function renderQuickRate(){
-  const el=document.getElementById("quickRateGrid");
-  if(!el)return;
-  let pool=games.filter(g=>!(g.rating>0));
-  if(!pool.length) pool=[...games];
-  pool.sort(()=>Math.random()-0.5);
-  const picks=pool.slice(0,3);
-  if(!picks.length){
-    el.innerHTML='<div class="quickRateHint">Noch keine Spiele in deiner Sammlung.</div>';
-    return;
-  }
-  el.innerHTML=picks.map(g=>{
-    const cover=g.cover
-      ? `<div class="quickRateCover"><img src="${g.cover}" alt=""></div>`
-      : `<div class="quickRateCover">${esc(g.name)}</div>`;
-    const stars=[1,2,3,4,5].map(n=>
-      `<button class="${g.rating>=n?"active":""}" onclick="rateQuick(${g.id},${n})" title="${n} Sterne">★</button>`
-    ).join("");
-    return `<div class="quickRateCard">${cover}<div class="quickRateName">${esc(g.name)}</div><div class="quickRateStars">${stars}</div></div>`;
-  }).join("");
-}
 function renderHomeRanking(){
   const el=document.getElementById("homeTop3"); if(!el)return;
   const mode=document.getElementById("homeRankMode")?.value||"plays";
@@ -858,55 +582,8 @@ function renderHomeRanking(){
   const medals=["🥈","🥇","🥉"];
   el.innerHTML=`<div class="podium">${order.map(i=>{const g=arr[i];const cover=g.cover?`<div class="podiumCover"><img src="${g.cover}" alt=""></div>`:`<div class="podiumCover">${esc(g.name)}</div>`;const meta=mode==="rating"?`⭐ ${g.rating}/5`:mode==="last"?`🕐 ${g.last?new Date(g.last+"T12:00:00").toLocaleDateString("de-AT"):"–"}`:`🎲 ${g.plays||0}×`;const stars=[1,2,3,4,5].map(n=>`<button class="${g.rating>=n?"active":""}" onclick="rateQuick(${g.id},${n})" title="${n} Sterne">★</button>`).join("");return `<div class="podiumPlace ${({0:"first",1:"second",2:"third"})[i]}"><div class="podiumCrown">${i===0?"👑":medals[i]}</div>${cover}<div class="podiumName">${esc(g.name)}</div><div class="podiumMeta">${meta}</div><div class="quickstars" aria-label="${esc(g.name)} bewerten">${stars}</div><div class="podiumBlock"><span class="podiumMedal">${medals[i]}</span>${i+1}</div></div>`}).join("")}</div>`;
 }
-
-function toggleCategoryFilter(){
-  const p=document.getElementById("categoryFilterPopover");
-  if(!p)return;
-  p.hidden=!p.hidden;
-}
-function clearCategoryFilter(){
-  const opts=document.querySelectorAll('#categoryFilterOptions input[type="checkbox"]');
-  opts.forEach(x=>x.checked=false);
-  if(typeof selectedCategories!=="undefined") selectedCategories=[];
-  updateCategoryFilterLabel();
-  if(typeof renderGames==="function") renderGames();
-}
-function updateCategoryFilterLabel(){
-  const count=document.getElementById("categoryFilterCount");
-  if(!count)return;
-  const n=document.querySelectorAll('#categoryFilterOptions input[type="checkbox"]:checked').length;
-  count.textContent=n?`${n} gewählt`:"Alle";
-}
-function renderCategoryFilterOptions(){
-  const box=document.getElementById("categoryFilterOptions");
-  if(!box)return;
-  const cats=Array.from(new Set((games||[]).flatMap(g=>Array.isArray(g.categories)?g.categories:[]))).filter(Boolean).sort((a,b)=>a.localeCompare(b,"de"));
-  box.innerHTML=cats.map(cat=>{
-    const safe=String(cat).replace(/"/g,'&quot;');
-    return `<label class="categoryFilterOption"><input type="checkbox" value="${safe}" onchange="categoryFilterChanged(this)"> ${esc(cat)}</label>`;
-  }).join("");
-  updateCategoryFilterLabel();
-}
-function categoryFilterChanged(cb){
-  if(typeof selectedCategories==="undefined") window.selectedCategories=[];
-  if(cb.checked){
-    if(!selectedCategories.includes(cb.value)) selectedCategories.push(cb.value);
-  }else{
-    selectedCategories=selectedCategories.filter(x=>x!==cb.value);
-  }
-  updateCategoryFilterLabel();
-  if(typeof renderGames==="function") renderGames();
-}
-document.addEventListener("click",e=>{
-  const wrap=document.querySelector(".categoryFilterWrap");
-  const pop=document.getElementById("categoryFilterPopover");
-  if(wrap&&pop&&!wrap.contains(e.target)) pop.hidden=true;
-});
-
 function renderAll(){
-  renderCategoryFilterOptions();
   renderHomeRanking();
-  renderQuickRate();
   renderChips();
   renderLibrary();
   renderGrid("favGrid",games.filter(g=>g.fav));
@@ -915,20 +592,21 @@ function renderAll(){
   let cats=[...new Set(games.flatMap(g=>catsOf(g)))].sort();
   let catsel=document.getElementById("rCat");
   if(catsel)catsel.innerHTML='<option value="">egal</option>'+cats.map(c=>`<option>${c}</option>`).join("");
-  renderLibraryCategoryFilters();
+  let art=document.getElementById("filterArt");
+  if(art){
+    let current=art.value;
+    art.innerHTML='<option value="">Alle Arten</option>'+cats.map(c=>`<option value="${c}">${c}</option>`).join("");
+    if(cats.includes(current))art.value=current;
+  }
   renderStats();
 }
 function clearLibraryFilters(){
-  const ids=["search","filterTime","filterPlayers","filterSpecial"];
+  const ids=["search","filterArt","filterTime","filterPlayers","filterSpecial"];
   ids.forEach(id=>{let e=document.getElementById(id);if(e)e.value=""});
-  libraryFilterCategories.clear();
-  resetPillGroup("playerFilterPills");
-  resetPillGroup("timeFilterPills");
-  resetPillGroup("specialFilterPills");
-
+  const category=document.getElementById("libraryCategory");
+  if(category)category.value="";
   const sort=document.getElementById("librarySort");
   if(sort)sort.value="name";
-  renderLibraryCategoryFilters();
   renderLibrary();
 }
 function played(id){let g=games.find(x=>x.id===id);g.plays++;g.last=new Date().toISOString().slice(0,10);save();alert(`✓ ${g.name} als gespielt markiert.`);renderAll();}
@@ -949,8 +627,8 @@ function selectedCats(id){return [...document.querySelectorAll("#"+id+" .chip.ac
 function addGame(){let name=document.getElementById("fName").value.trim();if(!name){alert("Bitte einen Namen eingeben.");return}games.push({id:Date.now(),addedAt:new Date().toISOString().slice(0,10),name,players:document.getElementById("fPlayers").value||"2–4",time:+document.getElementById("fTime").value||60,cat:selectedCats("fCats")[0]||"Sonstiges",categories:selectedCats("fCats").length?selectedCats("fCats"):["Sonstiges"],diff:document.getElementById("fDiff").value,rating:+document.getElementById("fRating").value,plays:0,fav:false,last:""});save();["fName","fPlayers","fTime"].forEach(x=>document.getElementById(x).value="");document.querySelectorAll("#fCats .chip").forEach(x=>x.classList.remove("active"));show("library");}
 function renderStats(){let total=games.reduce((a,g)=>a+g.plays,0),hours=Math.round(games.reduce((a,g)=>a+g.plays*g.time,0)/60);document.getElementById("statsGrid").innerHTML=`<div class="stat">🎲<b>${games.length}</b><span class="muted">Spiele insgesamt</span></div><div class="stat">⭐<b>${total}</b><span class="muted">Partien gespielt</span></div><div class="stat">⏱️<b>${hours} h</b><span class="muted">Spielzeit</span></div><div class="stat">🏷️<b>${new Set(games.map(g=>g.cat)).size}</b><span class="muted">Kategorien</span></div>`;document.getElementById("topGames").innerHTML=[...games].sort((a,b)=>b.plays-a.plays).slice(0,5).map((g,i)=>`<div class="row between" style="padding:9px 0;border-bottom:1px solid #eee"><span>${i+1}. ${g.name}</span><b>${g.plays}×</b></div>`).join("")}
 function exportData(){let blob=new Blob([JSON.stringify(games,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="meine-brettspiele.json";a.click();URL.revokeObjectURL(a.href)}
-function importData(){let i=document.createElement("input");i.type="file";i.accept=".json";i.onchange=()=>{let r=new FileReader();r.onload=()=>{try{games=JSON.parse(r.result);normalizeGameCategories();save();renderAll();alert("Sammlung importiert.");}catch(e){alert("Datei konnte nicht gelesen werden.")}};r.readAsText(i.files[0])};i.click()}
-function resetData(){if(confirm("Startsammlung wiederherstellen?")){games=seed.map(g=>({...g}));normalizeGameCategories();save();renderAll();}}
+function importData(){let i=document.createElement("input");i.type="file";i.accept=".json";i.onchange=()=>{let r=new FileReader();r.onload=()=>{try{games=JSON.parse(r.result);save();renderAll();alert("Sammlung importiert.");}catch(e){alert("Datei konnte nicht gelesen werden.")}};r.readAsText(i.files[0])};i.click()}
+function resetData(){if(confirm("Startsammlung wiederherstellen?")){games=seed;save();renderAll();}}
 
 function addFriend(){const name=document.getElementById("friendName").value.trim();if(!name){alert("Bitte einen Namen eingeben.");return}friends.push({id:Date.now(),name,group:document.getElementById("friendGroup").value.trim(),games:{}});saveFriends();document.getElementById("friendName").value="";document.getElementById("friendGroup").value="";renderFriends();}
 function removeFriend(id){if(!confirm("Freund wirklich entfernen?"))return;friends=friends.filter(f=>f.id!==id);saveFriends();renderFriends();renderAll();}
@@ -1006,7 +684,7 @@ function openDetails(id){
 function toggleFav(id){let g=games.find(x=>x.id===id);g.fav=!g.fav;save();openDetails(id);renderAll();}
 function setDetailRating(id,n){const g=games.find(x=>x.id===id);if(!g)return;g.rating=n;save();openDetails(id);renderAll();}
 function addSelectedEditCategoryFromSelect(){const sel=document.getElementById("eCategory");if(sel)addSelectedEditCategory(sel.value,"eSelectedCats");}
-function addSelectedEditCategory(cat,containerId){const el=document.getElementById(containerId);if(!el||!cat)return;const existing=[...el.querySelectorAll(".selectedcat")].map(x=>x.dataset.cat);if(existing.includes(cat))return;el.insertAdjacentHTML("beforeend",`<span class="selectedcat" data-cat="${esc(cat)}">${esc(cat)} <button type="button" class="remove-cat" data-cat="${esc(cat)}" onclick="removeSelectedEditCategory(this.dataset.cat)">×</button></span>`);}
+function addSelectedEditCategory(cat,containerId){const el=document.getElementById(containerId);if(!el||!cat)return;const existing=[...el.querySelectorAll(".selectedcat")].map(x=>x.dataset.cat);if(existing.includes(cat))return;el.insertAdjacentHTML("beforeend",`<span class="selectedcat" data-cat="${esc(cat)}">${esc(cat)} <button type="button" onclick="removeSelectedEditCategory(${JSON.stringify(cat)})">×</button></span>`);}
 function removeSelectedEditCategory(cat){const container=document.getElementById("eSelectedCats");if(!container)return;const chip=[...container.querySelectorAll(".selectedcat")].find(x=>x.dataset.cat===cat);if(chip)chip.remove();}
 function selectedEditCategories(){return [...document.querySelectorAll("#eSelectedCats .selectedcat")].map(x=>x.dataset.cat);}
 function editGame(id){
@@ -1017,7 +695,7 @@ function editGame(id){
   <div><label>Name</label><input id="eName" class="field" value="${esc(g.name)}"></div>
   <div><label>Spieler</label><input id="ePlayers" class="field" value="${esc(g.players)}"></div>
   <div><label>Spieldauer (Min.)</label><input id="eTime" class="field" type="number" value="${g.time}"></div>
-  <div style="grid-column:1/-1"><label>Kategorie</label><div class="categoryeditrow"><select id="eCategory" class="field">${categoryOptions().map(c=>`<option value="${esc(c)}" ${catsOf(g).includes(catsOf(g)[0])&&c===catsOf(g)[0]?"selected":""}>${esc(c)}</option>`).join("")}</select><button type="button" class="btn secondary categoryaddbtn" onclick="addSelectedEditCategoryFromSelect()">＋ Hinzufügen</button><button type="button" class="btn secondary categoryaddbtn" onclick="createCustomCategory('eCategory','eSelectedCats')">＋ Eigene Kategorie</button></div><div id="eSelectedCats" class="selectedcats">${catsOf(g).map(c=>`<span class="selectedcat" data-cat="${esc(c)}">${esc(c)} <button type="button" class="remove-cat" data-cat="${esc(c)}" onclick="removeSelectedEditCategory(this.dataset.cat)">×</button></span>`).join("")}</div></div>
+  <div style="grid-column:1/-1"><label>Kategorie</label><div class="categoryeditrow"><select id="eCategory" class="field">${categoryOptions().map(c=>`<option value="${esc(c)}" ${catsOf(g).includes(catsOf(g)[0])&&c===catsOf(g)[0]?"selected":""}>${esc(c)}</option>`).join("")}</select><button type="button" class="btn secondary categoryaddbtn" onclick="addSelectedEditCategoryFromSelect()">＋ Hinzufügen</button><button type="button" class="btn secondary categoryaddbtn" onclick="createCustomCategory('eCategory','eSelectedCats')">＋ Eigene Kategorie</button></div><div id="eSelectedCats" class="selectedcats">${catsOf(g).map(c=>`<span class="selectedcat" data-cat="${esc(c)}">${esc(c)} <button type="button" onclick="removeSelectedEditCategory(${JSON.stringify(c)})">×</button></span>`).join("")}</div></div>
   <div><label>Schwierigkeit</label><select id="eDiff" class="field"><option ${g.diff==="leicht"?"selected":""}>leicht</option><option ${g.diff==="mittel"?"selected":""}>mittel</option><option ${g.diff==="schwer"?"selected":""}>schwer</option></select></div>
   <div><label>Bewertung</label><select id="eRating" class="field">${[5,4,3,2,1,0].map(n=>`<option value="${n}" ${g.rating===n?"selected":""}>${n===0?"Noch nicht bewertet":n+" Sterne"}</option>`).join("")}</select></div>
   <div style="grid-column:1/-1"><label>📖 Spielhilfe / eigene Notizen</label><textarea id="eNotes" class="field" rows="5" placeholder="Regel-Merksätze, eigene Hausregeln, Tipps …">${esc(g.notes||"")}</textarea></div>
