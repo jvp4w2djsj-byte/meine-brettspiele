@@ -240,7 +240,7 @@ header h1{
 </div>
 <div class="cloudactions" style="margin-top:8px"><button class="btn" onclick="cloudSignUp()">☁️ Konto erstellen</button><button class="btn secondary" onclick="cloudSignIn()">🔐 Anmelden</button></div>
 <div class="cloudactions" style="margin-top:8px"><button class="btn secondary" onclick="cloudSyncNow()">↕️ Jetzt synchronisieren</button><button class="btn secondary" onclick="cloudSignOut()">Abmelden</button></div>
-<div class="cloudhint">Deine Spielstände werden verschlüsselt übertragen und in deinem privaten Benutzerkonto gespeichert. Für die Datenbank wird Row Level Security verwendet. Verwende hier ausschließlich den <b>Publishable Key</b>, niemals einen Service-Role-/Secret-Key.</div>
+<div class="cloudhint">Änderungen werden automatisch mit deinem privaten Benutzerkonto synchronisiert. Für die Datenbank wird Row Level Security verwendet. Verwende hier ausschließlich den <b>Publishable Key</b>, niemals einen Service-Role-/Secret-Key.</div>
 </div>
 <div style="margin-top:14px"><button class="btn secondary full" onclick="exportData()">📤 Sammlung exportieren</button><button class="btn secondary full" onclick="importData()">📥 Sammlung importieren</button><button class="btn full" onclick="resetData()">Sammlung auf deine Startsammlung zurücksetzen</button></div>
 </div></section>
@@ -402,18 +402,39 @@ async function cloudRefreshUser(){
   }finally{cloudRefreshInProgress=false;}
 }
 async function cloudSyncNow(fromLogin=false){
-  if(!ensureCloud())return;const {data,error:ue}=await supabaseClient.auth.getUser();const user=data?.user;
+  if(!ensureCloud())return;
+  const {data,error:ue}=await supabaseClient.auth.getUser();
+  const user=data?.user;
   if(ue||!user){if(!fromLogin)alert("Bitte zuerst anmelden.");return;}
+  const migrationKey="myBoardGameCloudInitialized:"+user.id;
+  const initialized=localStorage.getItem(migrationKey)==="1";
   const {data:row,error}=await supabaseClient.from("user_game_data").select("data,updated_at").eq("user_id",user.id).maybeSingle();
   if(error){alert("Cloud-Daten konnten nicht gelesen werden: "+error.message);return;}
   if(!row){
-    const {error:ie}=await supabaseClient.from("user_game_data").insert({user_id:user.id,data:snapshot()});
+    const {error:ie}=await supabaseClient.from("user_game_data").insert({user_id:user.id,data:snapshot(),updated_at:new Date().toISOString()});
     if(ie){alert("Cloud-Speicherung fehlgeschlagen: "+ie.message);return;}
-    setCloudStatus("Synchronisiert",true,user.email||"");if(!fromLogin)alert("Deine lokale Sammlung wurde erstmals in die Cloud hochgeladen.");return;
+    localStorage.setItem(migrationKey,"1");
+    setCloudStatus("Synchronisiert",true,user.email||"");
+    if(!fromLogin)alert("Deine lokale Sammlung wurde in die Cloud hochgeladen.");
+    return;
   }
-  const useCloud=confirm("Für dieses Konto gibt es bereits Cloud-Daten. OK = Cloud-Daten laden, Abbrechen = deine aktuelle Sammlung in die Cloud hochladen.");
-  if(useCloud){applySnapshot(row.data);setCloudStatus("Cloud-Daten geladen",true,user.email||"");}
-  else {const {error:up}=await supabaseClient.from("user_game_data").upsert({user_id:user.id,data:snapshot(),updated_at:new Date().toISOString()},{onConflict:"user_id"});if(up){alert("Cloud-Upload fehlgeschlagen: "+up.message);return;}setCloudStatus("Synchronisiert",true,user.email||"");}
+  if(!initialized){
+    const useCloud=confirm("Für dieses Konto gibt es bereits Cloud-Daten. OK = Cloud-Daten laden, Abbrechen = deine aktuelle Sammlung in die Cloud hochladen.");
+    if(useCloud){
+      applySnapshot(row.data);
+      localStorage.setItem(migrationKey,"1");
+      setCloudStatus("Cloud-Daten geladen",true,user.email||"");
+    }else{
+      const {error:up}=await supabaseClient.from("user_game_data").upsert({user_id:user.id,data:snapshot(),updated_at:new Date().toISOString()},{onConflict:"user_id"});
+      if(up){alert("Cloud-Upload fehlgeschlagen: "+up.message);return;}
+      localStorage.setItem(migrationKey,"1");
+      setCloudStatus("Synchronisiert",true,user.email||"");
+    }
+    return;
+  }
+  // Nach der einmaligen Einrichtung wird beim App-Start die aktuelle Cloud-Version geladen.
+  applySnapshot(row.data);
+  setCloudStatus("Synchronisiert",true,user.email||"");
 }
 async function autoCloudSave(){
   if(!supabaseClient)return;const {data}=await supabaseClient.auth.getUser();if(!data?.user)return;
